@@ -1,14 +1,9 @@
 import React from "react";
 
-import {
-  StyleSheet,
-  Pressable,
-  Animated,
-  type PressableProps,
-  View,
-} from "react-native";
-import Typography, { type Weight } from "./Typography";
-import shadeColor from "@/utility/shadeColor";
+import { StyleSheet, Pressable, type PressableProps, View } from "react-native";
+
+import Typography, { type Weight } from "@/components/Typography";
+import RowFlex from "@/components/RowFlex";
 
 type Size = "small" | "medium" | "large";
 
@@ -41,7 +36,6 @@ function Button({
     content: {
       width: "100%",
       height: "100%",
-      flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
       padding: 10,
@@ -64,11 +58,8 @@ function Button({
   });
 
   return (
-    <Pressable
-      {...props}
-      style={styles.root}
-    >
-      <Animated.View style={styles.content}>
+    <Pressable {...props} style={styles.root}>
+      <RowFlex style={styles.content}>
         <View style={styles.icon}>{icon}</View>
         <Typography
           size={size}
@@ -82,7 +73,7 @@ function Button({
         >
           {label}
         </Typography>
-      </Animated.View>
+      </RowFlex>
     </Pressable>
   );
 }
