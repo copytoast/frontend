@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { router } from "expo-router";
 
 import Logo from "@/assets/vectors/logo.svg";
 import Slogan from "@/assets/vectors/slogan.svg";
@@ -11,6 +12,11 @@ import Colors from "@/constants/Colors";
 import Button from "@/components/Button";
 
 export default function Index() {
+  function handleLogin() {
+    // TODO: 소셜 로그인 처리
+    router.push("/onboarding");
+  }
+
   return (
     <View style={styles.root}>
       {/* 로고 */}
@@ -30,12 +36,14 @@ export default function Index() {
           label={"Google 로그인"}
           color={Colors.greyLighter}
           icon={<GoogleLogo />}
+          onPress={handleLogin}
           fullWidth
         />
         <Button
           label={"카카오 로그인"}
           color={"#FEE500"}
           icon={<KakaoLogo />}
+          onPress={handleLogin}
           fullWidth
         />
       </View>
