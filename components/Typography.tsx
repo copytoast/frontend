@@ -2,7 +2,7 @@ import React from "react";
 
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-type Size = "small" | "medium" | "large";
+type Size = number | "small" | "medium" | "large";
 export type Weight = "light" | "regular" | "medium" | "bold";
 
 interface TypographyProps extends Omit<TextProps, "font"> {
@@ -21,7 +21,7 @@ function Typography({
     root: {
       color,
       fontFamily: "Pretendard",
-      fontSize: {
+      fontSize: typeof size === "number" ? size : {
         small: 12,
         medium: 16,
         large: 20,
