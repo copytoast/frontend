@@ -2,8 +2,13 @@ import { StyleSheet, View } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 
 import Colors from "@/constants/Colors";
+
 import ProgressBar from "@/components/ProgressBar";
 import ColumnFlex from "@/components/ColumnFlex";
+import BottomButton from "@/components/BottomButton";
+import Button from "@/components/Button";
+
+import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 export default function Index() {
   const headerHeight = useHeaderHeight();
@@ -22,12 +27,12 @@ export default function Index() {
     },
     bottom: {
       position: "absolute",
-      flexDirection: "column",
-      alignItems: "center",
       width: "100%",
       bottom: 0,
       padding: 20,
-      gap: 10,
+    },
+    bottomButton: {
+      flex: 1,
     },
   });
 
@@ -42,6 +47,22 @@ export default function Index() {
       <ColumnFlex style={styles.content}></ColumnFlex>
 
       {/* 하단 */}
+      <View style={styles.bottom}>
+        <BottomButton
+          anchor={{
+            label: "돌아가기",
+            onPress: () => {},
+          }}
+        >
+          <Button
+            label={"다음"}
+            color={Colors.primary}
+            icon={<ArrowForward />}
+            style={styles.bottomButton}
+            onPress={() => {}}
+          />
+        </BottomButton>
+      </View>
     </ColumnFlex>
   );
 }

@@ -26,11 +26,16 @@ function Typography({
         medium: 16,
         large: 20,
       }[size],
-      fontWeight: weight,
+      fontWeight: {
+        light: "300" as const,
+        regular: "400" as const,
+        medium: "500" as const,
+        bold: "700" as const,
+      }[weight],
     },
   });
 
-  return <Text {...props} style={styles.root} />;
+  return <Text {...props} style={[styles.root, props.style]} />;
 }
 
 export default Typography;

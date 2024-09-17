@@ -37,16 +37,7 @@ function ColumnFlex({
       alignItems,
     },
   });
-
-  return (
-    <View
-      {...props}
-      style={[
-        styles.root,
-        Array.isArray(props.style) ? props.style : [props.style],
-      ]}
-    />
-  );
+  return <View {...props} style={[styles.root, props.style]} />;
 }
 
 export default ColumnFlex;

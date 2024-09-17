@@ -5,6 +5,10 @@ import { StyleSheet, Pressable, type PressableProps, View } from "react-native";
 import Typography, { type Weight } from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
 
+import Colors from "@/constants/Colors";
+
+import isDarkColor from "@/utility/isDarkColor";
+
 type Size = "small" | "medium" | "large";
 
 interface ButtonProps extends Omit<PressableProps, "children"> {
@@ -57,12 +61,22 @@ function Button({
     },
   });
 
+  props.style;
   return (
-    <Pressable {...props} style={styles.root}>
+    <Pressable
+      {...props}
+      style={({ pressed }) => [
+        props.style instanceof Function
+          ? props.style({ pressed })
+          : props.style,
+        styles.root,
+      ]}
+    >
       <RowFlex style={styles.content}>
         <View style={styles.icon}>{icon}</View>
         <Typography
           size={size}
+          color={isDarkColor(color) ? Colors.white : Colors.greyDark}
           weight={
             {
               small: "regular" as Weight,
