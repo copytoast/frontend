@@ -12,6 +12,7 @@ interface RowFlexProps extends ViewProps {
   gap?: number;
   height?: DimensionValue;
   width?: DimensionValue;
+  flex?: FlexStyle["flex"];
   justifyContent?: FlexStyle["justifyContent"];
   alignItems?: FlexStyle["alignItems"];
 }
@@ -20,6 +21,7 @@ function RowFlex({
   gap,
   height,
   width,
+  flex,
   justifyContent,
   alignItems,
   ...props
@@ -27,11 +29,12 @@ function RowFlex({
   const styles = StyleSheet.create({
     root: {
       flexDirection: "row",
-      gap: gap,
-      height: height,
-      width: width,
-      justifyContent: justifyContent,
-      alignItems: alignItems,
+      gap,
+      height,
+      width,
+      flex,
+      justifyContent,
+      alignItems,
     },
   });
 

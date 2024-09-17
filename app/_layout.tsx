@@ -43,7 +43,10 @@ export default function RootLayout() {
       <Stack.Screen
         name="onboarding"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerTitle: "",
         }}
       />
     </Stack>
