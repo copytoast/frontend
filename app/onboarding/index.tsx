@@ -3,6 +3,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 
 import Colors from "@/constants/Colors";
 import ProgressBar from "@/components/ProgressBar";
+import ColumnFlex from "@/components/ColumnFlex";
 
 export default function Index() {
   const headerHeight = useHeaderHeight();
@@ -11,19 +12,13 @@ export default function Index() {
     root: {
       paddingTop: headerHeight,
       backgroundColor: Colors.white,
-      flexDirection: "column",
-      width: "100%",
-      height: "100%",
     },
     top: {
       padding: 20,
     },
     content: {
-      flexDirection: "column",
-      alignItems: "center",
       width: "100%",
-      paddingTop: 120,
-      gap: 20,
+      padding: 20,
     },
     bottom: {
       position: "absolute",
@@ -37,16 +32,16 @@ export default function Index() {
   });
 
   return (
-    <View style={styles.root}>
+    <ColumnFlex style={styles.root} width={"100%"} height={"100%"}>
       {/* 상단 */}
       <View style={styles.top}>
         <ProgressBar steps={["닉네임", "아이디", "빵 담기"]} currentStep={0} />
       </View>
 
       {/* 콘텐츠 */}
-      <View style={styles.content}></View>
+      <ColumnFlex style={styles.content}></ColumnFlex>
 
       {/* 하단 */}
-    </View>
+    </ColumnFlex>
   );
 }
