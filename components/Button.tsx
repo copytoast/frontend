@@ -72,7 +72,7 @@ function Button({
       ]}
     >
       <RowFlex style={styles.content}>
-        <View style={styles.icon}>{icon}</View>
+        {icon && <View style={styles.icon}>{icon}</View>}
         <Typography
           size={size}
           color={isDarkColor(color) ? Colors.white : Colors.greyDark}

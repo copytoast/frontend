@@ -1,29 +1,93 @@
 import React from "react";
 
-import { StyleSheet, TextInput, type TextInputProps, View } from "react-native";
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInput,
+  TextInputChangeEventData,
+  type TextInputProps,
+  View,
+} from "react-native";
 
-import Typography from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
 
 import Colors from "@/constants/Colors";
-
-import isDarkColor from "@/utility/isDarkColor";
 
 type Variant = "outlined" | "standard";
 
 interface TextFieldProps extends TextInputProps {
   variant?: Variant;
+  icon?: React.ReactNode;
+  height?: number;
 }
 
-function TextField({ variant = "outlined", ...props }: TextFieldProps) {
+function TextField({
+  variant = "outlined",
+  icon,
+  height,
+  ...props
+}: TextFieldProps) {
+  const [value, setValue] = React.useState(
+    props.value ?? props.defaultValue ?? ""
+  );
+
+  function handleChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
+    setValue(e.nativeEvent.text);
+    if (props.onChange) props.onChange(e);
+  }
+
   // 스타일
   const styles = StyleSheet.create({
     root: {
+      height,
+      paddingVertical: 5,
+    },
+    standardRoot: {},
+    outlinedRoot: {
+      paddingHorizontal: 5,
+      borderRadius: 10,
+    },
+    textInput: {
+      width: "100%",
+      height: "100%",
       fontFamily: "PretendardMedium",
+      fontSize: 18,
+      color: value === "" ? Colors.greyLight : Colors.grey,
+    },
+    icon: {
+      width: 24,
+      height: 24,
+    },
+    underline: {
+      width: "100%",
+      height: 2,
+      backgroundColor: value === "" ? Colors.greyLight : Colors.grey,
+      position: "absolute",
+      bottom: 0,
     },
   });
 
-  return <TextInput {...props} style={[props.style, styles.root]}></TextInput>;
+  return (
+    <RowFlex
+      gap={10}
+      alignItems={"center"}
+      style={[
+        styles.root,
+        props.style,
+        variant === "outlined" && styles.outlinedRoot,
+        variant === "standard" && styles.standardRoot,
+      ]}
+    >
+      {icon && <View style={styles.icon}>{icon}</View>}
+      <TextInput
+        {...props}
+        style={styles.textInput}
+        value={value}
+        onChange={handleChange}
+      ></TextInput>
+      {variant === "standard" && <View style={styles.underline} />}
+    </RowFlex>
+  );
 }
 
 export default TextField;

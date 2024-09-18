@@ -29,7 +29,7 @@ export default function Username() {
 
       {/* 하단 */}
       <View>
-        <TextField placeholder={"닉네임"} />
+        <TextField placeholder={"닉네임"} variant={"standard"} />
       </View>
     </ColumnFlex>
   );

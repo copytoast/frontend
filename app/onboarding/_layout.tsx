@@ -1,10 +1,10 @@
 import React from "react";
 
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, View } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
-import { router, Stack, Slot } from "expo-router";
+import { router, Slot } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -19,6 +19,7 @@ export default function OnboardingLayout() {
   const headerHeight = useHeaderHeight();
 
   const [step, setStep] = React.useState(0);
+  const [keyboardOpen, setKeyboardOpen] = React.useState(false);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const styles = StyleSheet.create({
@@ -55,18 +56,31 @@ export default function OnboardingLayout() {
 
   React.useEffect(() => {
     router.navigate("/onboarding/username");
+
+    Keyboard.addListener("keyboardDidShow", () => setKeyboardOpen(true));
+    Keyboard.addListener("keyboardDidHide", () => setKeyboardOpen(false));
+
+    return () => {
+      Keyboard.removeAllListeners("keyboardDidShow");
+      Keyboard.removeAllListeners("keyboardDidHide");
+    };
   }, []);
 
   return (
     <ColumnFlex style={styles.root} width={"100%"} height={"100%"}>
-      <ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps={"handled"}
+        automaticallyAdjustKeyboardInsets
+      >
         {/* 상단 */}
-        <View style={styles.top}>
-          <ProgressBar
-            steps={["닉네임", "아이디", "빵 담기"]}
-            currentStep={step}
-          />
-        </View>
+        {!keyboardOpen && (
+          <View style={styles.top}>
+            <ProgressBar
+              steps={["닉네임", "아이디", "빵 담기"]}
+              currentStep={step}
+            />
+          </View>
+        )}
 
         {/* 콘텐츠 */}
         <View style={styles.content}>
