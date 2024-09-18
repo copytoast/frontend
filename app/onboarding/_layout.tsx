@@ -1,10 +1,10 @@
 import React from "react";
 
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
-import { router, Stack } from "expo-router";
+import { router, Stack, Slot } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -19,19 +19,30 @@ export default function OnboardingLayout() {
   const headerHeight = useHeaderHeight();
 
   const [step, setStep] = React.useState(0);
+  const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const styles = StyleSheet.create({
     root: {
       paddingTop: headerHeight,
       backgroundColor: Colors.white,
     },
+    scroll: {
+      flex: 1,
+      height: "100%",
+    },
     top: {
       padding: 20,
     },
+    scrollWrapper: {
+      flex: 1,
+    },
     content: {
       padding: 20,
+      paddingBottom: bottomButtonHeight + 20,
+      flex: 1,
     },
     bottom: {
+      backgroundColor: Colors.white,
       position: "absolute",
       width: "100%",
       bottom: 0,
@@ -43,28 +54,33 @@ export default function OnboardingLayout() {
   });
 
   React.useEffect(() => {
-    if (step === 0) router.push("/onboarding/username");
-  }, [step]);
+    router.navigate("/onboarding/username");
+  }, []);
 
   return (
     <ColumnFlex style={styles.root} width={"100%"} height={"100%"}>
-      {/* 상단 */}
-      <View style={styles.top}>
-        <ProgressBar
-          steps={["닉네임", "아이디", "빵 담기"]}
-          currentStep={step}
-        />
-      </View>
+      <ScrollView>
+        {/* 상단 */}
+        <View style={styles.top}>
+          <ProgressBar
+            steps={["닉네임", "아이디", "빵 담기"]}
+            currentStep={step}
+          />
+        </View>
 
-      {/* 콘텐츠 */}
-      <ColumnFlex style={styles.content}>
-        <Stack>
-          <Stack.Screen name="username" options={{ headerShown: false }} />
-        </Stack>
-      </ColumnFlex>
+        {/* 콘텐츠 */}
+        <View style={styles.content}>
+          <Slot />
+        </View>
+      </ScrollView>
 
       {/* 하단 */}
-      <View style={styles.bottom}>
+      <View
+        style={styles.bottom}
+        onLayout={(event) =>
+          setBottomButtonHeight(event.nativeEvent.layout.height)
+        }
+      >
         <BottomButton
           anchor={{
             label: "돌아가기",

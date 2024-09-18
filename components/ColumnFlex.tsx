@@ -8,7 +8,7 @@ import {
   type FlexStyle,
 } from "react-native";
 
-interface ColumnFlexProps extends ViewProps {
+export interface ColumnFlexProps extends ViewProps {
   gap?: number;
   height?: DimensionValue;
   width?: DimensionValue;

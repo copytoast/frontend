@@ -9,7 +9,10 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   // 글꼴 로드
   const [loaded] = useFonts({
-    Pretendard: require("../assets/fonts/Pretendard.ttf"),
+    PretendardBold: require("../assets/fonts/Pretendard-Bold.otf"),
+    PretendardMedium: require("../assets/fonts/Pretendard-Medium.otf"),
+    PretendardRegular: require("../assets/fonts/Pretendard-Regular.otf"),
+    PretendardLight: require("../assets/fonts/Pretendard-Light.otf"),
   });
 
   React.useEffect(() => {

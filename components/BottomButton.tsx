@@ -2,7 +2,7 @@ import React from "react";
 
 import { Pressable, StyleSheet } from "react-native";
 
-import ColumnFlex from "@/components/ColumnFlex";
+import ColumnFlex, { type ColumnFlexProps } from "@/components/ColumnFlex";
 import Typography from "./Typography";
 import Colors from "@/constants/Colors";
 import RowFlex from "./RowFlex";
@@ -13,14 +13,18 @@ interface Button {
   disabled?: boolean;
 }
 
-interface BottomButtonProps {
+interface BottomButtonProps extends ColumnFlexProps {
   anchor?: Button;
   children?: React.ReactNode;
 }
 
-export default function BottomButton({ anchor, children }: BottomButtonProps) {
+export default function BottomButton({
+  anchor,
+  children,
+  ...props
+}: BottomButtonProps) {
   return (
-    <ColumnFlex gap={20} width={"100%"} alignItems={"center"}>
+    <ColumnFlex {...props} gap={20} width={"100%"} alignItems={"center"}>
       {anchor && (
         <Pressable onPress={anchor.onPress} disabled={anchor.disabled}>
           <Typography

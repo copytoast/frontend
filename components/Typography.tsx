@@ -20,18 +20,17 @@ function Typography({
   const styles = StyleSheet.create({
     root: {
       color,
-      fontFamily: "Pretendard",
-      fontSize: typeof size === "number" ? size : {
-        small: 12,
-        medium: 16,
-        large: 20,
-      }[size],
-      fontWeight: {
-        light: "300" as const,
-        regular: "400" as const,
-        medium: "500" as const,
-        bold: "700" as const,
-      }[weight],
+      fontFamily: `Pretendard${weight.charAt(0).toUpperCase()}${weight.slice(
+        1
+      )}`,
+      fontSize:
+        typeof size === "number"
+          ? size
+          : {
+              small: 12,
+              medium: 16,
+              large: 20,
+            }[size],
     },
   });
 

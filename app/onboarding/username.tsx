@@ -4,18 +4,17 @@ import Colors from "@/constants/Colors";
 
 import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
+import TextField from "@/components/TextField";
 
 export default function Username() {
   const styles = StyleSheet.create({
-    root: {},
     top: {
       marginBottom: 100,
     },
-    bottom: {},
   });
 
   return (
-    <ColumnFlex style={styles.root} width={"100%"}>
+    <ColumnFlex width={"100%"}>
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
@@ -29,7 +28,9 @@ export default function Username() {
       </ColumnFlex>
 
       {/* 하단 */}
-      <View style={styles.bottom}></View>
+      <View>
+        <TextField placeholder={"닉네임"} />
+      </View>
     </ColumnFlex>
   );
 }

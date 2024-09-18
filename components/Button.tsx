@@ -61,7 +61,6 @@ function Button({
     },
   });
 
-  props.style;
   return (
     <Pressable
       {...props}
