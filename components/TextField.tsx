@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TextInput,
   TextInputChangeEventData,
-  type TextInputProps,
   View,
+  type TextInputProps,
+  type DimensionValue,
 } from "react-native";
 
 import RowFlex from "@/components/RowFlex";
@@ -18,12 +19,14 @@ type Variant = "outlined" | "standard";
 interface TextFieldProps extends TextInputProps {
   variant?: Variant;
   icon?: React.ReactNode;
-  height?: number;
+  width?: DimensionValue;
+  height?: DimensionValue;
 }
 
 function TextField({
   variant = "outlined",
   icon,
+  width,
   height,
   ...props
 }: TextFieldProps) {
@@ -39,6 +42,7 @@ function TextField({
   // 스타일
   const styles = StyleSheet.create({
     root: {
+      width,
       height,
       paddingVertical: 5,
     },
@@ -69,7 +73,7 @@ function TextField({
 
   return (
     <RowFlex
-      gap={10}
+      gap={variant === "standard" ? 0 : 10}
       alignItems={"center"}
       style={[
         styles.root,
@@ -84,7 +88,7 @@ function TextField({
         style={styles.textInput}
         value={value}
         onChange={handleChange}
-      ></TextInput>
+      />
       {variant === "standard" && <View style={styles.underline} />}
     </RowFlex>
   );

@@ -31,7 +31,8 @@ export default function ProgressBar({ steps, currentStep }: ProgressBarProps) {
     foregroundLine: {
       backgroundColor: Colors.primary,
       width: `${
-        100 * ((currentStep + 1) / steps.length - 1 / (steps.length * 2))
+        100 *
+        Math.min((currentStep + 1) / steps.length - 1 / (steps.length * 2), 1)
       }%`,
     },
   });

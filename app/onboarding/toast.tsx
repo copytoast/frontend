@@ -12,11 +12,11 @@ export default function Username() {
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
-          닉네임을 입력해주세요.
+          암기빵을 담아주세요.
         </Typography>
         <Typography size="medium" color={Colors.grey}>
-          암기빵은 다른 사람과 상호작용할 수 있는 플랫폼이에요. 다른 사람이 보게
-          될 나의 이름을 정해주세요.
+          원하는 암기빵을 골라주세요. 지금 암기빵을 고르지 않고 나중에 나만의
+          암기빵을 만들 수도 있어요.
         </Typography>
       </ColumnFlex>
 

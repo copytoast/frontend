@@ -15,7 +15,7 @@ import ColumnFlex from "@/components/ColumnFlex";
 export default function Index() {
   function handleLogin() {
     // TODO: 소셜 로그인 처리
-    router.push("/onboarding");
+    router.push("/onboarding/username");
   }
 
   return (

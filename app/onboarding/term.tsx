@@ -1,10 +1,9 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import Colors from "@/constants/Colors";
 
 import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
-import TextField from "@/components/TextField";
 
 export default function Username() {
   return (
@@ -12,18 +11,12 @@ export default function Username() {
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
-          닉네임을 입력해주세요.
+          모두 완료됐어요.
         </Typography>
         <Typography size="medium" color={Colors.grey}>
-          암기빵은 다른 사람과 상호작용할 수 있는 플랫폼이에요. 다른 사람이 보게
-          될 나의 이름을 정해주세요.
+          약관에 모두 동의하면 모든 가입 절차가 끝나요.
         </Typography>
       </ColumnFlex>
-
-      {/* 하단 */}
-      <View>
-        <TextField placeholder={"닉네임"} variant={"standard"} />
-      </View>
     </ColumnFlex>
   );
 }
