@@ -165,7 +165,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   top: {
-    padding: 20,
+    height: 100,
+    paddingHorizontal: 20,
+    justifyContent: "center",
   },
   scrollWrapper: {
     flex: 1,
