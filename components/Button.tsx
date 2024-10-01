@@ -1,6 +1,13 @@
 import React from "react";
 
-import { StyleSheet, Pressable, type PressableProps, View } from "react-native";
+import {
+  StyleSheet,
+  Pressable,
+  type PressableProps,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 import Typography, { type Weight } from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
@@ -10,6 +17,7 @@ import Colors from "@/constants/Colors";
 import isDarkColor from "@/utility/isDarkColor";
 
 type Size = "small" | "medium" | "large";
+type IconPosition = "left" | "right";
 
 interface ButtonProps extends Omit<PressableProps, "children"> {
   label: string;
@@ -17,6 +25,7 @@ interface ButtonProps extends Omit<PressableProps, "children"> {
   color?: string;
   fullWidth?: boolean;
   icon?: React.ReactNode;
+  iconPosition?: IconPosition;
 }
 
 function Button({
@@ -25,7 +34,9 @@ function Button({
   color = "none",
   fullWidth = false,
   icon,
+  iconPosition = "left",
   disabled,
+  style,
   ...props
 }: ButtonProps) {
   const backgroundColor = disabled ? Colors.greyLight : color;
@@ -33,16 +44,13 @@ function Button({
   // 스타일
   const styles = StyleSheet.create({
     root: {
+      flexDirection: "row",
       width: fullWidth ? "100%" : "auto",
       height: {
         small: 40,
         medium: 50,
         large: 60,
       }[size],
-    },
-    content: {
-      width: "100%",
-      height: "100%",
       alignItems: "center",
       justifyContent: "center",
       padding: 10,
@@ -68,28 +76,29 @@ function Button({
     <Pressable
       {...props}
       style={({ pressed }) => [
-        props.style instanceof Function
-          ? props.style({ pressed })
-          : props.style,
         styles.root,
+        style instanceof Function ? style({ pressed }) : style,
       ]}
     >
-      <RowFlex style={styles.content}>
-        {icon && <View style={styles.icon}>{icon}</View>}
-        <Typography
-          size={size}
-          color={isDarkColor(backgroundColor) ? Colors.white : Colors.greyDark}
-          weight={
-            {
-              small: "regular" as Weight,
-              medium: "medium" as Weight,
-              large: "bold" as Weight,
-            }[size]
-          }
-        >
-          {label}
-        </Typography>
-      </RowFlex>
+      {icon && iconPosition === "left" && (
+        <View style={styles.icon}>{icon}</View>
+      )}
+      <Typography
+        size={size}
+        color={isDarkColor(backgroundColor) ? Colors.white : Colors.greyDark}
+        weight={
+          {
+            small: "regular" as Weight,
+            medium: "medium" as Weight,
+            large: "bold" as Weight,
+          }[size]
+        }
+      >
+        {label}
+      </Typography>
+      {icon && iconPosition === "right" && (
+        <View style={styles.icon}>{icon}</View>
+      )}
     </Pressable>
   );
 }

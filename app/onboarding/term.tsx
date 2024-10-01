@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StyleSheet, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -11,11 +11,9 @@ import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
+import Arrow from "@/assets/vectors/arrow.svg";
 
 export default function Term() {
-  const params = useLocalSearchParams<{ toasts?: string[] }>();
-
-  const [toasts, setToasts] = React.useState(params.toasts);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const dynamicStyles = {
@@ -48,7 +46,22 @@ export default function Term() {
       </ColumnFlex>
 
       {/* 콘텐츠 */}
-      <View></View>
+      <View style={styles.content}>
+        <Button
+          label={"서비스 이용 약관"}
+          style={styles.termButton}
+          color={Colors.greyLighter}
+          icon={<Arrow />}
+          iconPosition={"right"}
+        />
+        <Button
+          label={"개인정보 취급 방침"}
+          style={styles.termButton}
+          color={Colors.greyLighter}
+          icon={<Arrow />}
+          iconPosition={"right"}
+        />
+      </View>
 
       {/* 하단 */}
       <View
@@ -83,6 +96,10 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+    gap: 5,
+  },
+  termButton: {
+    justifyContent: "space-between",
   },
   bottom: {
     backgroundColor: Colors.white,
