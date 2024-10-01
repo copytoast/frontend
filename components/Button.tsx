@@ -1,16 +1,11 @@
 import React from "react";
 
-import {
-  StyleSheet,
-  Pressable,
-  type PressableProps,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import { StyleSheet, Pressable, type PressableProps, View } from "react-native";
 
-import Typography, { type Weight } from "@/components/Typography";
-import RowFlex from "@/components/RowFlex";
+import Typography, {
+  type Weight,
+  type Size as FontSize,
+} from "@/components/Typography";
 
 import Colors from "@/constants/Colors";
 
@@ -22,6 +17,7 @@ type IconPosition = "left" | "right";
 interface ButtonProps extends Omit<PressableProps, "children"> {
   label: string;
   size?: Size;
+  fontSize?: FontSize;
   color?: string;
   fullWidth?: boolean;
   icon?: React.ReactNode;
@@ -33,6 +29,7 @@ function Button({
   size = "medium",
   color = "none",
   fullWidth = false,
+  fontSize,
   icon,
   iconPosition = "left",
   disabled,
@@ -84,7 +81,7 @@ function Button({
         <View style={styles.icon}>{icon}</View>
       )}
       <Typography
-        size={size}
+        size={fontSize ? fontSize : size}
         color={isDarkColor(backgroundColor) ? Colors.white : Colors.greyDark}
         weight={
           {

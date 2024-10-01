@@ -9,15 +9,43 @@ import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
+import MinimalToast from "@/components/MinimalToast";
 
 import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
+interface Toast {
+  id: number;
+  name: string;
+  like: number;
+  picture?: string;
+}
+
+// sample data
+const sampleToasts: Toast[] = [
+  {
+    id: 0,
+    name: "수능 영단어 1,000선",
+    like: 100000,
+  },
+  {
+    id: 1,
+    name: "주기율표",
+    like: 8431,
+  },
+];
+
 export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
 
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
+  const [toasts, setToasts] = React.useState<Toast[]>();
+
+  React.useEffect(() => {
+    // TODO: fetch toasts
+    setTimeout(() => setToasts(sampleToasts), 500);
+  });
 
   const dynamicStyles = {
     root: {
@@ -36,6 +64,25 @@ export default function Username() {
     router.push("/onboarding/term");
   }
 
+  // 암기빵 담기 핸들러
+  function handleAdd(toastId: number) {
+    if (!onboarding.state.toasts.includes(toastId))
+      onboarding.dispatch((prev) => ({
+        ...prev,
+        toasts: [...prev.toasts, toastId],
+      }));
+    else
+      onboarding.dispatch((prev) => ({
+        ...prev,
+        toasts: prev.toasts.filter((id) => id !== toastId),
+      }));
+  }
+
+  // 암기빵 상세 핸들러
+  function handleDetail(toastId: number) {
+    // TODO
+  }
+
   return (
     <ColumnFlex style={dynamicStyles.root}>
       {/* 상단 */}
@@ -50,7 +97,24 @@ export default function Username() {
       </ColumnFlex>
 
       {/* 콘텐츠 */}
-      <View></View>
+      <ColumnFlex gap={10} style={styles.content}>
+        {toasts ? (
+          toasts.map((toast) => (
+            <MinimalToast
+              name={toast.name}
+              like={toast.like}
+              picture={toast.picture}
+              added={onboarding.state.toasts.includes(toast.id)}
+              onAdd={() => handleAdd(toast.id)}
+              onDetail={() => handleDetail(toast.id)}
+              key={toast.id}
+            />
+          ))
+        ) : (
+          // TODO: 스켈레톤 적용하기
+          <Typography>Loading...</Typography>
+        )}
+      </ColumnFlex>
 
       {/* 하단 */}
       <View

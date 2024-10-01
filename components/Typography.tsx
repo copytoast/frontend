@@ -2,7 +2,7 @@ import React from "react";
 
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-type Size = number | "small" | "medium" | "large";
+export type Size = number | "small" | "medium" | "large";
 export type Weight = "light" | "regular" | "medium" | "bold";
 
 interface TypographyProps extends Omit<TextProps, "font"> {
