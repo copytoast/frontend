@@ -10,10 +10,9 @@ import Colors from "@/constants/Colors";
 
 import ProgressBar from "@/components/ProgressBar";
 import ColumnFlex from "@/components/ColumnFlex";
+import ExitModal from "@/components/onboarding/ExitModal";
 
 import { OnboardingProvider } from "@/contexts/Onboarding";
-
-import ExitModal from "./exitModal";
 
 export type OnboardingData = Partial<{
   username: string;
