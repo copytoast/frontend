@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StyleSheet, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -11,12 +11,13 @@ import TextField from "@/components/TextField";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
+import { OnboardingContext } from "@/contexts/Onboarding";
+
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 export default function Username() {
-  const params = useLocalSearchParams<{ username?: string }>();
+  const onboarding = React.useContext(OnboardingContext);
 
-  const [username, setUsername] = React.useState(params.username);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const dynamicStyles = {
@@ -26,7 +27,7 @@ export default function Username() {
     },
   };
 
-  const nextButtonEnabled = username && username.length > 0;
+  const nextButtonEnabled = onboarding.state.username.length > 0;
 
   // 돌아가기 버튼 핸들러
   function handleBack() {
@@ -56,10 +57,9 @@ export default function Username() {
         <TextField
           placeholder={"이름"}
           variant={"standard"}
-          value={username ?? ""}
+          value={onboarding.state.username}
           onChangeText={(username) => {
-            setUsername(username);
-            router.setParams({ username });
+            onboarding.dispatch((prev) => ({ ...prev, username }));
           }}
         />
       </View>

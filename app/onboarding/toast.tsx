@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StyleSheet, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -10,12 +10,13 @@ import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
+import { OnboardingContext } from "@/contexts/Onboarding";
+
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 export default function Username() {
-  const params = useLocalSearchParams<{ toasts?: string[] }>();
+  const onboarding = React.useContext(OnboardingContext);
 
-  const [toasts, setToasts] = React.useState(params.toasts);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const dynamicStyles = {

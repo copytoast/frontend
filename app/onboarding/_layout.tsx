@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Keyboard, ScrollView, StyleSheet, View } from "react-native";
-import { useNavigation, router, Slot, usePathname } from "expo-router";
+import { useNavigation, Slot, usePathname } from "expo-router";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 import { type NavigationAction } from "@react-navigation/native";
@@ -10,6 +10,8 @@ import Colors from "@/constants/Colors";
 
 import ProgressBar from "@/components/ProgressBar";
 import ColumnFlex from "@/components/ColumnFlex";
+
+import { OnboardingProvider } from "@/contexts/Onboarding";
 
 import ExitModal from "./exitModal";
 
@@ -99,7 +101,9 @@ export default function OnboardingLayout() {
 
         {/* 콘텐츠 */}
         <View style={styles.content}>
-          <Slot />
+          <OnboardingProvider>
+            <Slot />
+          </OnboardingProvider>
         </View>
       </ScrollView>
 

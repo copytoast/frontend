@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StyleSheet, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
@@ -12,13 +12,14 @@ import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 import RowFlex from "@/components/RowFlex";
 
+import { OnboardingContext } from "@/contexts/Onboarding";
+
 import EmailIcon from "@/assets/vectors/email.svg";
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 export default function Username() {
-  const params = useLocalSearchParams<{ id?: string }>();
+  const onboarding = React.useContext(OnboardingContext);
 
-  const [id, setId] = React.useState(params.id);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   const dynamicStyles = {
@@ -28,7 +29,7 @@ export default function Username() {
     },
   };
 
-  const nextButtonEnabled = id && id.length > 0;
+  const nextButtonEnabled = onboarding.state.id.length > 0;
 
   // 돌아가기 버튼 핸들러
   function handleBack() {
@@ -61,10 +62,9 @@ export default function Username() {
             placeholder={"아이디"}
             variant={"standard"}
             style={styles.textField}
-            value={id ?? ""}
+            value={onboarding.state.id}
             onChangeText={(id) => {
-              setId(id);
-              router.setParams({ id });
+              onboarding.dispatch((prev) => ({ ...prev, id }));
             }}
           />
         </RowFlex>
