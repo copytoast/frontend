@@ -25,8 +25,11 @@ function Button({
   color = "none",
   fullWidth = false,
   icon,
+  disabled,
   ...props
 }: ButtonProps) {
+  const backgroundColor = disabled ? Colors.greyLight : color;
+
   // 스타일
   const styles = StyleSheet.create({
     root: {
@@ -45,7 +48,7 @@ function Button({
       padding: 10,
       borderRadius: 10,
       gap: 10,
-      backgroundColor: color,
+      backgroundColor,
     },
     icon: {
       width: {
@@ -75,7 +78,7 @@ function Button({
         {icon && <View style={styles.icon}>{icon}</View>}
         <Typography
           size={size}
-          color={isDarkColor(color) ? Colors.white : Colors.greyDark}
+          color={isDarkColor(backgroundColor) ? Colors.white : Colors.greyDark}
           weight={
             {
               small: "regular" as Weight,

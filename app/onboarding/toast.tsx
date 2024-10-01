@@ -1,14 +1,42 @@
+import React from "react";
+
 import { StyleSheet, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
 import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
-import TextField from "@/components/TextField";
+import BottomButton from "@/components/BottomButton";
+import Button from "@/components/Button";
+
+import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 export default function Username() {
+  const params = useLocalSearchParams<{ toasts?: string[] }>();
+
+  const [toasts, setToasts] = React.useState(params.toasts);
+  const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
+
+  const dynamicStyles = {
+    root: {
+      flex: 1,
+      paddingBottom: bottomButtonHeight,
+    },
+  };
+
+  // 돌아가기 버튼 핸들러
+  function handleBack() {
+    router.back();
+  }
+
+  // 다음 버튼 핸들러
+  function handleNext() {
+    router.push("/onboarding/term");
+  }
+
   return (
-    <ColumnFlex width={"100%"}>
+    <ColumnFlex style={dynamicStyles.root}>
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
@@ -20,9 +48,30 @@ export default function Username() {
         </Typography>
       </ColumnFlex>
 
+      {/* 콘텐츠 */}
+      <View></View>
+
       {/* 하단 */}
-      <View>
-        <TextField placeholder={"닉네임"} variant={"standard"} />
+      <View
+        style={styles.bottom}
+        onLayout={(event) =>
+          setBottomButtonHeight(event.nativeEvent.layout.height)
+        }
+      >
+        <BottomButton
+          anchor={{
+            label: "이전",
+            onPress: handleBack,
+          }}
+        >
+          <Button
+            label={"다음"}
+            color={Colors.primary}
+            icon={<ArrowForward />}
+            style={styles.bottomButton}
+            onPress={handleNext}
+          />
+        </BottomButton>
       </View>
     </ColumnFlex>
   );
@@ -30,6 +79,21 @@ export default function Username() {
 
 const styles = StyleSheet.create({
   top: {
-    marginBottom: 100,
+    height: 200,
+    padding: 20,
+  },
+  content: {
+    padding: 20,
+  },
+  bottom: {
+    backgroundColor: Colors.white,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 20,
+  },
+  bottomButton: {
+    flex: 1,
   },
 });

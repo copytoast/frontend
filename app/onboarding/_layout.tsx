@@ -10,11 +10,14 @@ import Colors from "@/constants/Colors";
 
 import ProgressBar from "@/components/ProgressBar";
 import ColumnFlex from "@/components/ColumnFlex";
-import BottomButton from "@/components/BottomButton";
-import Button from "@/components/Button";
 
-import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 import ExitModal from "./exitModal";
+
+export type OnboardingData = Partial<{
+  username: string;
+  id: string;
+  toast: string[];
+}>;
 
 export default function OnboardingLayout() {
   const navigation = useNavigation();
@@ -26,7 +29,6 @@ export default function OnboardingLayout() {
   const [step, setStep] = React.useState(0);
   const [exitModalOpen, setExitModalOpen] = React.useState(false);
   const [keyboardOpen, setKeyboardOpen] = React.useState(false);
-  const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
   // 키보드 이벤트 감지
   React.useEffect(() => {
@@ -56,26 +58,6 @@ export default function OnboardingLayout() {
     else if (pathname === "/onboarding/term") setStep(3);
   }, [pathname]);
 
-  // 다음 버튼 핸들러
-  function handleNext() {
-    switch (pathname) {
-      case "/onboarding/username":
-        router.push("/onboarding/id");
-        break;
-      case "/onboarding/id":
-        router.push("/onboarding/toast");
-        break;
-      case "/onboarding/toast":
-        router.push("/onboarding/term");
-        break;
-    }
-  }
-
-  // 돌아가기 버튼 핸들러
-  function handleBack() {
-    router.back();
-  }
-
   // 모달 닫기 핸들러
   function handleModalClose() {
     setExitModalOpen(false);
@@ -92,9 +74,6 @@ export default function OnboardingLayout() {
     root: {
       paddingTop: headerHeight,
     },
-    content: {
-      paddingBottom: bottomButtonHeight + 20,
-    },
   };
 
   return (
@@ -106,6 +85,7 @@ export default function OnboardingLayout() {
       <ScrollView
         keyboardShouldPersistTaps={"handled"}
         automaticallyAdjustKeyboardInsets
+        contentContainerStyle={styles.scrollWrapper}
       >
         {/* 상단 */}
         {!keyboardOpen && (
@@ -118,33 +98,10 @@ export default function OnboardingLayout() {
         )}
 
         {/* 콘텐츠 */}
-        <View style={[styles.content, dynamicStyles.content]}>
+        <View style={styles.content}>
           <Slot />
         </View>
       </ScrollView>
-
-      {/* 하단 */}
-      <View
-        style={styles.bottom}
-        onLayout={(event) =>
-          setBottomButtonHeight(event.nativeEvent.layout.height)
-        }
-      >
-        <BottomButton
-          anchor={{
-            label: "돌아가기",
-            onPress: handleBack,
-          }}
-        >
-          <Button
-            label={"다음"}
-            color={Colors.primary}
-            icon={<ArrowForward />}
-            style={styles.bottomButton}
-            onPress={handleNext}
-          />
-        </BottomButton>
-      </View>
 
       {/* 모달 */}
       <ExitModal
@@ -160,10 +117,6 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: Colors.white,
   },
-  scroll: {
-    flex: 1,
-    height: "100%",
-  },
   top: {
     height: 100,
     paddingHorizontal: 20,
@@ -173,15 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 20,
     flex: 1,
-  },
-  bottom: {
-    backgroundColor: Colors.white,
-    position: "absolute",
-    width: "100%",
-    bottom: 0,
-    padding: 20,
   },
   bottomButton: {
     flex: 1,
