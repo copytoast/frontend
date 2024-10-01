@@ -12,7 +12,7 @@ export default function Username() {
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
-          닉네임을 입력해주세요.
+          이름을 입력해주세요.
         </Typography>
         <Typography size="medium" color={Colors.grey}>
           암기빵은 다른 사람과 상호작용할 수 있는 플랫폼이에요. 다른 사람이 보게
@@ -22,7 +22,7 @@ export default function Username() {
 
       {/* 하단 */}
       <View>
-        <TextField placeholder={"닉네임"} variant={"standard"} />
+        <TextField placeholder={"이름"} variant={"standard"} />
       </View>
     </ColumnFlex>
   );

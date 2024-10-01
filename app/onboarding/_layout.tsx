@@ -21,8 +21,9 @@ export default function OnboardingLayout() {
   const headerHeight = useHeaderHeight();
   const pathname = usePathname();
 
+  const exitAction = React.useRef<NavigationAction>();
+
   const [step, setStep] = React.useState(0);
-  const [exitAction, setExitAction] = React.useState<NavigationAction>();
   const [exitModalOpen, setExitModalOpen] = React.useState(false);
   const [keyboardOpen, setKeyboardOpen] = React.useState(false);
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
@@ -41,7 +42,7 @@ export default function OnboardingLayout() {
   // 페이지 나가기 이벤트 감지
   React.useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
-      setExitAction(e.data.action);
+      exitAction.current = e.data.action;
       e.preventDefault();
       setExitModalOpen(true);
     });
@@ -78,7 +79,7 @@ export default function OnboardingLayout() {
   // 모달 닫기 핸들러
   function handleModalClose() {
     setExitModalOpen(false);
-    if (exitAction) navigation.dispatch(exitAction);
+    if (exitAction.current) navigation.dispatch(exitAction.current);
   }
 
   // 모달 확인 핸들러
