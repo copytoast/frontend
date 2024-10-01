@@ -61,6 +61,7 @@ export default function Username() {
           onChangeText={(username) => {
             onboarding.dispatch((prev) => ({ ...prev, username }));
           }}
+          onSubmitEditing={handleNext}
         />
       </View>
 

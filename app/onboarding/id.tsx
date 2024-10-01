@@ -66,6 +66,7 @@ export default function Username() {
             onChangeText={(id) => {
               onboarding.dispatch((prev) => ({ ...prev, id }));
             }}
+            onSubmitEditing={handleNext}
           />
         </RowFlex>
       </View>
