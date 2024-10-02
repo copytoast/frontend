@@ -52,6 +52,7 @@ export default function Term() {
           style={styles.termButton}
           color={Colors.greyLighter}
           icon={<Arrow />}
+          iconSize={20}
           iconPosition={"right"}
         />
         <Button
@@ -59,6 +60,7 @@ export default function Term() {
           style={styles.termButton}
           color={Colors.greyLighter}
           icon={<Arrow />}
+          iconSize={20}
           iconPosition={"right"}
         />
       </View>
@@ -80,6 +82,7 @@ export default function Term() {
             label={"모두 동의하고 가입 완료"}
             color={Colors.primary}
             icon={<ArrowForward />}
+            iconSize={24}
             style={styles.bottomButton}
             onPress={handleNext}
           />
@@ -100,6 +103,8 @@ const styles = StyleSheet.create({
   },
   termButton: {
     justifyContent: "space-between",
+    height: 50,
+    paddingHorizontal: 15,
   },
   bottom: {
     backgroundColor: Colors.white,
@@ -110,6 +115,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bottomButton: {
-    flex: 1,
+    width: "100%",
+    height: 50,
   },
 });

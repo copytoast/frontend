@@ -1,36 +1,38 @@
 import React from "react";
 
-import { StyleSheet, Pressable, type PressableProps, View } from "react-native";
+import {
+  StyleSheet,
+  Pressable,
+  View,
+  type PressableProps,
+  type DimensionValue,
+} from "react-native";
 
-import Typography, {
-  type Weight,
-  type Size as FontSize,
-} from "@/components/Typography";
+import Typography, { type Weight } from "@/components/Typography";
 
 import Colors from "@/constants/Colors";
 
 import isDarkColor from "@/utility/isDarkColor";
 
-type Size = "small" | "medium" | "large";
 type IconPosition = "left" | "right";
 
 interface ButtonProps extends Omit<PressableProps, "children"> {
   label: string;
-  size?: Size;
-  fontSize?: FontSize;
+  fontWeight?: Weight;
+  fontSize?: number;
   color?: string;
-  fullWidth?: boolean;
   icon?: React.ReactNode;
+  iconSize?: DimensionValue;
   iconPosition?: IconPosition;
 }
 
 function Button({
   label,
-  size = "medium",
+  fontWeight = "regular",
   color = "none",
-  fullWidth = false,
   fontSize,
   icon,
+  iconSize,
   iconPosition = "left",
   disabled,
   style,
@@ -42,30 +44,15 @@ function Button({
   const styles = StyleSheet.create({
     root: {
       flexDirection: "row",
-      width: fullWidth ? "100%" : "auto",
-      height: {
-        small: 40,
-        medium: 50,
-        large: 60,
-      }[size],
       alignItems: "center",
       justifyContent: "center",
-      padding: 10,
       borderRadius: 10,
       gap: 10,
       backgroundColor,
     },
     icon: {
-      width: {
-        small: 16,
-        medium: 20,
-        large: 24,
-      }[size],
-      height: {
-        small: 16,
-        medium: 20,
-        large: 24,
-      }[size],
+      width: iconSize,
+      height: iconSize,
     },
   });
 
@@ -81,15 +68,9 @@ function Button({
         <View style={styles.icon}>{icon}</View>
       )}
       <Typography
-        size={fontSize ? fontSize : size}
+        size={fontSize}
         color={isDarkColor(backgroundColor) ? Colors.white : Colors.greyDark}
-        weight={
-          {
-            small: "regular" as Weight,
-            medium: "medium" as Weight,
-            large: "bold" as Weight,
-          }[size]
-        }
+        weight={fontWeight}
       >
         {label}
       </Typography>

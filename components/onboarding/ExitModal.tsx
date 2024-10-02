@@ -32,6 +32,7 @@ export default function ExitModal({
         label={"계속 가입"}
         color={Colors.primary}
         icon={<ArrowForward />}
+        iconSize={24}
         onPress={onConfirm}
         style={styles.button}
       />
@@ -58,5 +59,6 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
+    height: 50,
   },
 });

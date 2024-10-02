@@ -47,14 +47,13 @@ function MinimalToast({
     <RowFlex style={[styles.root, style]}>
       <RowFlex style={styles.left} gap={10}>
         <View>{icon}</View>
-        <Typography size="medium" weight="medium" color={Colors.greyDark}>
+        <Typography size={16} weight="medium" color={Colors.greyDark}>
           {name}
         </Typography>
       </RowFlex>
       <Button
         label={added ? "취소" : "담기"}
-        size={"small"}
-        fontSize={"medium"}
+        fontSize={16}
         color={added ? Colors.greyLight : Colors.primary}
         onPress={onAdd}
         style={styles.button}
@@ -66,7 +65,6 @@ function MinimalToast({
 const styles = StyleSheet.create({
   root: {
     justifyContent: "space-between",
-    paddingVertical: 5,
   },
   left: {
     alignItems: "center",

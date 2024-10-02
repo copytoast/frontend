@@ -42,15 +42,17 @@ export default function Index() {
           label={"Google 로그인"}
           color={Colors.greyLighter}
           icon={<GoogleLogo />}
+          iconSize={24}
           onPress={handleLogin}
-          fullWidth
+          style={styles.loginButton}
         />
         <Button
           label={"카카오 로그인"}
           color={"#FEE500"}
           icon={<KakaoLogo />}
+          iconSize={24}
           onPress={handleLogin}
-          fullWidth
+          style={styles.loginButton}
         />
       </View>
     </ColumnFlex>
@@ -76,5 +78,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 20,
     gap: 10,
+  },
+  loginButton: {
+    width: "100%",
+    height: 50,
   },
 });

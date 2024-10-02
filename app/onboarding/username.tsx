@@ -82,6 +82,7 @@ export default function Username() {
             label={"다음"}
             color={Colors.primary}
             icon={<ArrowForward />}
+            iconSize={24}
             style={styles.bottomButton}
             onPress={nextButtonEnabled ? handleNext : undefined}
             disabled={!nextButtonEnabled}
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bottomButton: {
-    flex: 1,
+    width: "100%",
+    height: 50,
   },
 });
