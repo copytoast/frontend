@@ -15,15 +15,11 @@ import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
-interface Toast {
-  id: number;
-  name: string;
-  like: number;
-  picture?: string;
-}
+import type { MinimalToast as MinimalToastType, Toast } from "@/types/Toast";
+import ToastDetailModal from "@/components/onboarding/ToastDetailModal";
 
 // sample data
-const sampleToasts: Toast[] = [
+const sampleToasts: MinimalToastType[] = [
   {
     id: 0,
     name: "수능 영단어 1,000선",
@@ -36,16 +32,53 @@ const sampleToasts: Toast[] = [
   },
 ];
 
+const sampleToastDetail: Record<number, Toast> = {
+  0: {
+    id: 0,
+    name: "수능 영단어 1,000선",
+    like: 100000,
+    creator: "관리자",
+    createdAt: "2021-08-01",
+    updatedAt: "2021-08-01",
+    description:
+      "수능 영단어 1,000선은 수능 영어 시험에서 자주 나오는 영어 단어 1,000개를 모아놓은 암기빵입니다.",
+    added: true,
+  },
+  1: {
+    id: 1,
+    name: "주기율표",
+    like: 8431,
+    creator: "관리자",
+    createdAt: "2021-08-01",
+    updatedAt: "2021-08-01",
+    description:
+      "주기율표는 화학에서 사용되는 주기율표를 모아놓은 암기빵입니다.",
+    added: true,
+  },
+};
+
 export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
 
+  const [detailModalOpen, setDetailModalOpen] = React.useState(false);
+  const [toastDetail, setToastDetail] = React.useState<Toast>();
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
-  const [toasts, setToasts] = React.useState<Toast[]>();
+  const [toasts, setToasts] = React.useState<MinimalToastType[]>();
 
   React.useEffect(() => {
     // TODO: fetch toasts
     setTimeout(() => setToasts(sampleToasts), 500);
   });
+
+  // 모달 닫기 핸들러
+  function handleModalClose() {
+    setDetailModalOpen(false);
+  }
+
+  // 모달 담기 핸들러
+  function handleModalAdd(toastId: number) {
+    handleAdd(toastId);
+  }
 
   const dynamicStyles = {
     root: {
@@ -80,7 +113,13 @@ export default function Username() {
 
   // 암기빵 상세 핸들러
   function handleDetail(toastId: number) {
-    // TODO
+    setDetailModalOpen(true);
+
+    // TODO: fetch toast detail
+    setToastDetail(undefined);
+    setTimeout(() => {
+      setToastDetail(sampleToastDetail[toastId]);
+    }, 500);
   }
 
   return (
@@ -139,6 +178,14 @@ export default function Username() {
           />
         </BottomButton>
       </View>
+
+      {/* 모달 */}
+      <ToastDetailModal
+        toast={toastDetail}
+        visible={detailModalOpen}
+        onCancel={handleModalClose}
+        onAdd={handleModalAdd}
+      />
     </ColumnFlex>
   );
 }

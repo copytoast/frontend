@@ -12,12 +12,11 @@ import {
 import Typography from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
-import LikeBadge from "@/components/LikeBadge";
 
 import Colors from "@/constants/Colors";
 
-import Logo from "@/assets/vectors/logo.svg";
 import InfoIcon from "@/assets/vectors/info.svg";
+import ToastIcon from "./ToastIcon";
 
 interface MinimalToastProps {
   name: string;
@@ -38,19 +37,10 @@ function MinimalToast({
   added,
   style,
 }: MinimalToastProps) {
-  const icon = picture ? (
-    <Image source={{ uri: picture }} style={styles.icon} />
-  ) : (
-    <View style={[styles.icon, styles.defaultIconBackground]}>
-      <Logo width={25} height={25} />
-      <LikeBadge liked={added} like={like} style={styles.likeBadge} />
-    </View>
-  );
-
   return (
     <RowFlex style={[styles.root, style]}>
       <RowFlex style={styles.left} gap={10}>
-        <View>{icon}</View>
+        <ToastIcon size={40} picture={picture} like={{ count: like, added }} />
         <Typography size={16} weight="medium" color={Colors.greyDark}>
           {name}
         </Typography>
@@ -74,21 +64,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   left: {
-    alignItems: "center",
-  },
-  icon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  likeBadge: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-  },
-  defaultIconBackground: {
-    backgroundColor: Colors.primaryLighter,
-    justifyContent: "center",
     alignItems: "center",
   },
   button: {

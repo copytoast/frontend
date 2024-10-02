@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 
 import Colors from "@/constants/Colors";
 
