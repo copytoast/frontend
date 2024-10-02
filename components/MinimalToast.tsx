@@ -2,6 +2,7 @@ import React from "react";
 
 import {
   Image,
+  Pressable,
   StyleSheet,
   View,
   type StyleProp,
@@ -11,10 +12,12 @@ import {
 import Typography from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
+import LikeBadge from "@/components/LikeBadge";
 
 import Colors from "@/constants/Colors";
 
 import Logo from "@/assets/vectors/logo.svg";
+import InfoIcon from "@/assets/vectors/info.svg";
 
 interface MinimalToastProps {
   name: string;
@@ -40,6 +43,7 @@ function MinimalToast({
   ) : (
     <View style={[styles.icon, styles.defaultIconBackground]}>
       <Logo width={25} height={25} />
+      <LikeBadge liked={added} like={like} style={styles.likeBadge} />
     </View>
   );
 
@@ -50,6 +54,9 @@ function MinimalToast({
         <Typography size={16} weight="medium" color={Colors.greyDark}>
           {name}
         </Typography>
+        <Pressable onPress={onDetail}>
+          <InfoIcon width={24} height={24} />
+        </Pressable>
       </RowFlex>
       <Button
         label={added ? "취소" : "담기"}
@@ -73,6 +80,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  likeBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
   defaultIconBackground: {
     backgroundColor: Colors.primaryLighter,
