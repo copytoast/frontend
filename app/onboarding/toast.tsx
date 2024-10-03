@@ -17,6 +17,7 @@ import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 import type { MinimalToast as MinimalToastType, Toast } from "@/types/Toast";
 import ToastDetailModal from "@/components/onboarding/ToastDetailModal";
+import Skeleton from "@/components/Skeleton";
 
 // sample data
 const sampleToasts: MinimalToastType[] = [
@@ -150,8 +151,35 @@ export default function Username() {
             />
           ))
         ) : (
-          // TODO: 스켈레톤 적용하기
-          <Typography>Loading...</Typography>
+          <>
+            <Skeleton isLoading={!toasts}>
+              <MinimalToast
+                name={""}
+                like={0}
+                added={false}
+                onAdd={() => {}}
+                onDetail={() => {}}
+              />
+            </Skeleton>
+            <Skeleton isLoading={!toasts}>
+              <MinimalToast
+                name={""}
+                like={0}
+                added={false}
+                onAdd={() => {}}
+                onDetail={() => {}}
+              />
+            </Skeleton>
+            <Skeleton isLoading={!toasts}>
+              <MinimalToast
+                name={""}
+                like={0}
+                added={false}
+                onAdd={() => {}}
+                onDetail={() => {}}
+              />
+            </Skeleton>
+          </>
         )}
       </ColumnFlex>
 

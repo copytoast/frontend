@@ -12,6 +12,7 @@ interface SkeletonProps {
   children?: React.ReactNode;
   containerStyle?: StyleProp<ViewStyle>;
   contentStyle?: StyleProp<ViewStyle>;
+  gradientStyle?: StyleProp<ViewStyle>;
 }
 
 export default function Skeleton({
@@ -19,6 +20,7 @@ export default function Skeleton({
   children,
   containerStyle,
   contentStyle,
+  gradientStyle,
 }: SkeletonProps) {
   const gradientAnimated = React.useRef(new Animated.Value(0)).current;
   const opacityAnimated = React.useRef(new Animated.Value(0)).current;
@@ -66,7 +68,9 @@ export default function Skeleton({
 
   return (
     <Animated.View style={containerStyle}>
-      <Animated.View style={[dynamicStyles.gradient, styles.gradient]} />
+      <Animated.View
+        style={[dynamicStyles.gradient, styles.gradient, gradientStyle]}
+      />
       <Animated.View
         style={[dynamicStyles.content, contentStyle]}
         pointerEvents={isLoading ? "none" : "auto"}

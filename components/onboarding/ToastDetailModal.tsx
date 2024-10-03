@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import ModalFrame from "@/components/ModalFrame";
 import Typography from "@/components/Typography";
 import Button from "@/components/Button";
-import RowFlex from "@/components/RowFlex";
 import ToastIcon from "@/components/ToastIcon";
 import Skeleton from "@/components/Skeleton";
 
@@ -37,14 +36,21 @@ export default function ToastDetailModal({
         style={styles.button}
       />
 
-      <Button
-        label={toast?.added ? "담기 취소" : "담기"}
-        color={Colors.primary}
-        icon={<EmptyHeartIcon />}
-        iconSize={20}
-        onPress={toast && (() => onAdd(toast.id))}
-        style={styles.button}
-      />
+      <Skeleton
+        isLoading={!toast}
+        containerStyle={styles.buttonSkeleton}
+        gradientStyle={styles.buttonSkeletonGradient}
+        contentStyle={styles.button}
+      >
+        <Button
+          label={toast?.added ? "담기 취소" : "담기"}
+          color={Colors.primary}
+          icon={<EmptyHeartIcon />}
+          iconSize={20}
+          onPress={toast && (() => onAdd(toast.id))}
+          style={styles.button}
+        />
+      </Skeleton>
     </>
   );
 
@@ -111,6 +117,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: Colors.greyLighter,
     borderRadius: 5,
+  },
+  buttonSkeleton: {
+    flex: 1,
+    height: 50,
+  },
+  buttonSkeletonGradient: {
+    borderRadius: 10,
   },
   button: {
     flex: 1,
