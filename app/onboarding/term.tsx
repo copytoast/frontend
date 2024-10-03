@@ -10,11 +10,31 @@ import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
+import { SessionContext } from "@/contexts/Session";
+
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 import Arrow from "@/assets/vectors/arrow.svg";
 
+// sample data
+const sampleSession = {
+  token: "sample_token",
+  user: {
+    username: "관리자",
+    id: "admin",
+  },
+};
+
 export default function Term() {
+  const session = React.useContext(SessionContext);
+
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
+
+  // 로그인 상태인 경우 메인 화면으로 이동
+  React.useEffect(() => {
+    if (session.state.user && session.state.token) {
+      router.replace("/");
+    }
+  }, [session.state]);
 
   const dynamicStyles = {
     root: {
@@ -30,7 +50,7 @@ export default function Term() {
 
   // 다음 버튼 핸들러
   function handleNext() {
-    router.push("/onboarding/term");
+    session.dispatch(sampleSession);
   }
 
   return (

@@ -10,14 +10,14 @@ import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 import MinimalToast from "@/components/MinimalToast";
+import ToastDetailModal from "@/components/onboarding/ToastDetailModal";
+import Skeleton from "@/components/Skeleton";
 
 import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 import type { MinimalToast as MinimalToastType, Toast } from "@/types/Toast";
-import ToastDetailModal from "@/components/onboarding/ToastDetailModal";
-import Skeleton from "@/components/Skeleton";
 
 // sample data
 const sampleToasts: MinimalToastType[] = [

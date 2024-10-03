@@ -11,7 +11,6 @@ import Colors from "@/constants/Colors";
 
 import Button from "@/components/Button";
 import ColumnFlex from "@/components/ColumnFlex";
-import Skeleton from "@/components/Skeleton";
 
 export default function Index() {
   function handleLogin() {

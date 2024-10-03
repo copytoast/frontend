@@ -1,8 +1,9 @@
 import React from "react";
 
 import { useFonts } from "expo-font";
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { SessionProvider } from "@/contexts/Session";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,38 +21,35 @@ export default function RootLayout() {
 
     // 글꼴 로드가 완료되면 스플래시 화면을 숨김
     SplashScreen.hideAsync();
-
-    // 로그인이 되어 있지 않으면 로그인 화면으로 이동
-    if (true) {
-      router.replace("/login");
-    }
   }, [loaded]);
 
   if (!loaded) return null;
 
-  return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="login"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="onboarding"
-        options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTransparent: true,
-          headerTitle: "",
-        }}
-      />
-    </Stack>
-  );
+  return loaded ? (
+    <SessionProvider>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="login"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTransparent: true,
+            headerTitle: "",
+          }}
+        />
+      </Stack>
+    </SessionProvider>
+  ) : null;
 }

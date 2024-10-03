@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Keyboard, ScrollView, StyleSheet, View } from "react-native";
-import { useNavigation, Slot, usePathname } from "expo-router";
+import { useNavigation, Slot, usePathname, Redirect } from "expo-router";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-import { type NavigationAction } from "@react-navigation/native";
+import { EventArg, type NavigationAction } from "@react-navigation/native";
 
 import Colors from "@/constants/Colors";
 
@@ -13,6 +13,7 @@ import ColumnFlex from "@/components/ColumnFlex";
 import ExitModal from "@/components/onboarding/ExitModal";
 
 import { OnboardingProvider } from "@/contexts/Onboarding";
+import { SessionContext } from "@/contexts/Session";
 
 export type OnboardingData = Partial<{
   username: string;
@@ -21,6 +22,8 @@ export type OnboardingData = Partial<{
 }>;
 
 export default function OnboardingLayout() {
+  const session = React.useContext(SessionContext);
+
   const navigation = useNavigation();
   const headerHeight = useHeaderHeight();
   const pathname = usePathname();
@@ -30,6 +33,9 @@ export default function OnboardingLayout() {
   const [step, setStep] = React.useState(0);
   const [exitModalOpen, setExitModalOpen] = React.useState(false);
   const [keyboardOpen, setKeyboardOpen] = React.useState(false);
+
+  const loggedIn =
+    session.state.user !== undefined && session.state.token !== undefined;
 
   // 키보드 이벤트 감지
   React.useEffect(() => {
@@ -44,12 +50,19 @@ export default function OnboardingLayout() {
 
   // 페이지 나가기 이벤트 감지
   React.useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
+    const handleBeforeRemove = (
+      e: EventArg<"beforeRemove", true, { action: NavigationAction }>
+    ) => {
+      if (e.data.action.type === "REPLACE") return;
       exitAction.current = e.data.action;
       e.preventDefault();
       setExitModalOpen(true);
-    });
-  }, []);
+    };
+
+    navigation.addListener("beforeRemove", handleBeforeRemove);
+
+    return () => navigation.removeListener("beforeRemove", handleBeforeRemove);
+  });
 
   // pathname 변경 감지
   React.useEffect(() => {
@@ -76,6 +89,8 @@ export default function OnboardingLayout() {
       paddingTop: headerHeight,
     },
   };
+
+  if (loggedIn) return <Redirect href={"/"} />;
 
   return (
     <ColumnFlex
