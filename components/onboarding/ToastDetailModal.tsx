@@ -4,14 +4,16 @@ import ModalFrame from "@/components/ModalFrame";
 import Typography from "@/components/Typography";
 import Button from "@/components/Button";
 import RowFlex from "@/components/RowFlex";
+import ToastIcon from "@/components/ToastIcon";
+import Skeleton from "@/components/Skeleton";
 
 import Colors from "@/constants/Colors";
 
 import EmptyHeartIcon from "@/assets/vectors/empty_heart_white.svg";
 
-import type { Toast } from "@/types/Toast";
-import ToastIcon from "../ToastIcon";
 import getRelativeTime from "@/utility/getRelativeTime";
+
+import type { Toast } from "@/types/Toast";
 
 interface ToastDetailModalProps {
   toast?: Toast;
@@ -51,7 +53,7 @@ export default function ToastDetailModal({
       <View style={styles.content}>
         <View style={styles.info}>
           {/* 제목 */}
-          <RowFlex gap={15} style={styles.name}>
+          <Skeleton isLoading={!toast} contentStyle={styles.name}>
             <ToastIcon
               picture={toast?.picture}
               size={40}
@@ -63,21 +65,27 @@ export default function ToastDetailModal({
             <Typography size={20} weight={"bold"} color={Colors.greyDark}>
               {toast?.name}
             </Typography>
-          </RowFlex>
+          </Skeleton>
 
           {/* 제작 날짜 및 업데이트 날짜 */}
-          {toast && (
+          <Skeleton isLoading={!toast}>
             <Typography size={12} color={Colors.greyLight}>
-              {toast?.creator}님이 {getRelativeTime(new Date(toast?.createdAt))}
-              에 제작 ㆍ {getRelativeTime(new Date(toast?.updatedAt))}에
-              업데이트
+              {toast
+                ? `${toast.creator}님이 ${getRelativeTime(
+                    new Date(toast.createdAt)
+                  )}에 제작 ㆍ ${getRelativeTime(
+                    new Date(toast.updatedAt)
+                  )}에 업데이트`
+                : "정보를 불러올 수 없어요."}
             </Typography>
-          )}
+          </Skeleton>
 
           {/* 설명 */}
-          <Typography size={16} color={Colors.grey}>
-            {toast?.description}
-          </Typography>
+          <Skeleton isLoading={!toast}>
+            <Typography size={16} color={Colors.grey}>
+              {toast?.description}
+            </Typography>
+          </Skeleton>
         </View>
         <View style={styles.preview}></View>
       </View>
@@ -93,7 +101,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   name: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 15,
   },
   preview: {
     height: 200,

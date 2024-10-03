@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, StyleSheet, Animated, Easing } from "react-native";
+import { StyleSheet, Animated, Easing } from "react-native";
 
 import Logo from "@/assets/vectors/logo.svg";
 import GreyLogo from "@/assets/vectors/logo_grey.svg";
