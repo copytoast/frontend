@@ -29,13 +29,6 @@ export default function Term() {
 
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
 
-  // 로그인 상태인 경우 메인 화면으로 이동
-  React.useEffect(() => {
-    if (session.state.user && session.state.token) {
-      router.replace("/");
-    }
-  }, [session.state]);
-
   const dynamicStyles = {
     root: {
       flex: 1,
@@ -50,7 +43,9 @@ export default function Term() {
 
   // 다음 버튼 핸들러
   function handleNext() {
-    session.dispatch(sampleSession);
+    setTimeout(() => {
+      session.dispatch(sampleSession);
+    }, 500);
   }
 
   return (
