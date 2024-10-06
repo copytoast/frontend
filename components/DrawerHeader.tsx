@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import type { DrawerHeaderProps } from "@react-navigation/drawer";
 
 import RowFlex from "@/components/RowFlex";
+import Button from "@/components/Button";
 import Typography from "@/components/Typography";
 
 import Colors from "@/constants/Colors";
@@ -24,9 +25,10 @@ export default function DrawerHeader(props: DrawerHeaderProps) {
   return (
     <SafeAreaView style={dynamicStyles.safeArea}>
       <RowFlex gap={15} style={styles.root}>
-        <Pressable onPress={props.navigation.toggleDrawer}>
-          <MenuIcon width={30} height={30} />
-        </Pressable>
+        <Button
+          onPress={props.navigation.toggleDrawer}
+          icon={<MenuIcon width={30} height={30} />}
+        />
 
         <Pressable style={styles.searchBoxWrapper} onPress={() => {}}>
           <RowFlex gap={10} style={styles.searchBox}>

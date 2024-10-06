@@ -41,12 +41,15 @@ function MinimalToast({
     <RowFlex style={[styles.root, style]}>
       <RowFlex style={styles.left} gap={10}>
         <ToastIcon size={40} picture={picture} like={{ count: like, added }} />
-        <Typography size={16} weight="medium" color={Colors.greyDark}>
-          {name}
-        </Typography>
-        <Pressable onPress={onDetail}>
-          <InfoIcon width={24} height={24} />
-        </Pressable>
+        <RowFlex style={styles.left} gap={5}>
+          <Typography size={16} weight="medium" color={Colors.greyDark}>
+            {name}
+          </Typography>
+          <Button
+            onPress={onDetail}
+            icon={<InfoIcon width={24} height={24} />}
+          />
+        </RowFlex>
       </RowFlex>
       <Button
         label={added ? "취소" : "담기"}

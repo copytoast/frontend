@@ -10,6 +10,7 @@ import {
 import ColumnFlex from "@/components/ColumnFlex";
 import RowFlex from "@/components/RowFlex";
 import Typography from "@/components/Typography";
+import FeedbackPressable from "@/components/FeedbackPressable";
 
 import Colors from "@/constants/Colors";
 
@@ -36,7 +37,13 @@ export default function Section({
 }: SectionProps) {
   return (
     <ColumnFlex style={[styles.root, style]}>
-      <Pressable onPress={onTitlePress}>
+      <FeedbackPressable
+        onPress={onTitlePress}
+        style={styles.titleButton}
+        contentStyle={styles.titleButtonContent}
+        scaleComponent={"content"}
+        colorComponent={"content"}
+      >
         <RowFlex style={[styles.title, titleStyle]}>
           <RowFlex gap={10}>
             {titleIcon}
@@ -45,14 +52,10 @@ export default function Section({
             </Typography>
           </RowFlex>
           <RowFlex>
-            {titleArrowVisible && (
-              <Pressable>
-                <ArrowIcon width={12} height={12} />
-              </Pressable>
-            )}
+            {titleArrowVisible && <ArrowIcon width={12} height={12} />}
           </RowFlex>
         </RowFlex>
-      </Pressable>
+      </FeedbackPressable>
       {children}
     </ColumnFlex>
   );
@@ -63,6 +66,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     overflow: "hidden",
+  },
+  titleButton: {},
+  titleButtonContent: {
+    borderRadius: 10,
   },
   title: {
     justifyContent: "space-between",

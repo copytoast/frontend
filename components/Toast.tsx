@@ -14,6 +14,7 @@ import RowFlex from "@/components/RowFlex";
 import ToastIcon from "@/components/ToastIcon";
 import ColumnFlex from "@/components/ColumnFlex";
 import CheckBox from "@/components/CheckBox";
+import Button from "@/components/Button";
 
 import Colors from "@/constants/Colors";
 
@@ -80,9 +81,7 @@ function Toast({
         </ColumnFlex>
       </RowFlex>
       {detailButtonVisible && (
-        <Pressable>
-          <MoreIcon width={24} height={24} />
-        </Pressable>
+        <Button icon={<MoreIcon width={24} height={24} />} />
       )}
     </RowFlex>
   );
