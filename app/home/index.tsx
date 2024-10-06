@@ -1,39 +1,29 @@
-import Typography from "@/components/Typography";
-
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import Colors from "@/constants/Colors";
 
+import ColumnFlex from "@/components/ColumnFlex";
+import Section from "@/components/Section";
+
+import GreyLogo from "@/assets/vectors/logo_grey.svg";
+
 export default function Home() {
   return (
-    <View>
-      <Typography>Home</Typography>
-    </View>
+    <ColumnFlex style={styles.root}>
+      <Section
+        title="암기빵"
+        titleIcon={<GreyLogo width={20} height={20} />}
+        titleArrowVisible
+      >
+        <ColumnFlex />
+      </Section>
+    </ColumnFlex>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: Colors.white,
-  },
-  content: {
-    paddingTop: 120,
-  },
-  top: {},
-  textLogo: {
-    gap: 10,
-  },
-  bottom: {
-    position: "absolute",
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    bottom: 0,
-    padding: 20,
-    gap: 10,
-  },
-  loginButton: {
-    width: "100%",
-    height: 50,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
   },
 });
