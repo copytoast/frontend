@@ -53,7 +53,7 @@ function MinimalToast({
         fontSize={16}
         color={added ? Colors.greyLight : Colors.primary}
         onPress={onAdd}
-        style={styles.button}
+        contentStyle={styles.button}
       />
     </RowFlex>
   );

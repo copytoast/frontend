@@ -65,6 +65,7 @@ export default function Term() {
         <Button
           label={"서비스 이용 약관"}
           style={styles.termButton}
+          contentStyle={styles.termButtonContent}
           color={Colors.greyLighter}
           icon={<Arrow />}
           iconSize={20}
@@ -73,6 +74,7 @@ export default function Term() {
         <Button
           label={"개인정보 취급 방침"}
           style={styles.termButton}
+          contentStyle={styles.termButtonContent}
           color={Colors.greyLighter}
           icon={<Arrow />}
           iconSize={20}
@@ -117,8 +119,10 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   termButton: {
-    justifyContent: "space-between",
     height: 50,
+  },
+  termButtonContent: {
+    justifyContent: "space-between",
     paddingHorizontal: 15,
   },
   bottom: {
