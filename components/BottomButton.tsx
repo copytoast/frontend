@@ -3,9 +3,10 @@ import React from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import ColumnFlex, { type ColumnFlexProps } from "@/components/ColumnFlex";
-import Typography from "./Typography";
+import Typography from "@/components/Typography";
+import RowFlex from "@/components/RowFlex";
+
 import Colors from "@/constants/Colors";
-import RowFlex from "./RowFlex";
 
 interface Button {
   label: string;

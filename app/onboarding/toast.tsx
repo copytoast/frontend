@@ -17,10 +17,10 @@ import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
-import type { MinimalToast as MinimalToastType, Toast } from "@/types/Toast";
+import type { Toast, BasicToast } from "@/types/Toast";
 
 // sample data
-const sampleToasts: MinimalToastType[] = [
+const sampleToasts: BasicToast[] = [
   {
     id: 0,
     name: "수능 영단어 1,000선",
@@ -44,6 +44,9 @@ const sampleToastDetail: Record<number, Toast> = {
     description:
       "수능 영단어 1,000선은 수능 영어 시험에서 자주 나오는 영어 단어 1,000개를 모아놓은 암기빵입니다.",
     added: true,
+    type: "MATCHING",
+    memoryRate: 0,
+    view: 0,
   },
   1: {
     id: 1,
@@ -55,6 +58,9 @@ const sampleToastDetail: Record<number, Toast> = {
     description:
       "주기율표는 화학에서 사용되는 주기율표를 모아놓은 암기빵입니다.",
     added: true,
+    type: "ORDER",
+    memoryRate: 0,
+    view: 0,
   },
 };
 
@@ -64,7 +70,7 @@ export default function Username() {
   const [detailModalOpen, setDetailModalOpen] = React.useState(false);
   const [toastDetail, setToastDetail] = React.useState<Toast>();
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
-  const [toasts, setToasts] = React.useState<MinimalToastType[]>();
+  const [toasts, setToasts] = React.useState<BasicToast[]>();
 
   React.useEffect(() => {
     // TODO: fetch toasts

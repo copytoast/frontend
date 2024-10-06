@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { User } from "@/types/User";
+import type { BasicUser } from "@/types/User";
 
 interface Session {
-  user?: User;
+  user?: BasicUser;
   token?: string;
 }
 
