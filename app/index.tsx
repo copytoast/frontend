@@ -6,6 +6,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StackActions } from "@react-navigation/native";
 
 import { SessionContext } from "@/contexts/Session";
+import Colors from "@/constants/Colors";
+import DrawerHeader from "@/components/DrawerHeader";
 
 import HomeScreen from "@/app/home";
 
@@ -21,11 +23,17 @@ export default function Index() {
   React.useEffect(() => {
     if (navigation.canGoBack()) navigation.dispatch(StackActions.popToTop);
   }, [loggedIn]);
-
   if (!loggedIn) return <Redirect href={"/login"} />;
 
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        header: DrawerHeader,
+        headerStyle: styles.header,
+        sceneContainerStyle: styles.content,
+      }}
+    >
       <Drawer.Screen name="홈" component={HomeScreen} />
     </Drawer.Navigator>
   );
@@ -36,5 +44,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+  },
+  header: {
+    height: 50,
+  },
+  content: {
+    backgroundColor: Colors.greyLighter,
   },
 });
