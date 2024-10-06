@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native";
 
-import Colors from "@/constants/Colors";
-
 import ColumnFlex from "@/components/ColumnFlex";
 import Section from "@/components/Section";
 

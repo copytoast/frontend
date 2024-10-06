@@ -13,6 +13,7 @@ import Typography from "@/components/Typography";
 import RowFlex from "@/components/RowFlex";
 import ToastIcon from "@/components/ToastIcon";
 import ColumnFlex from "@/components/ColumnFlex";
+import CheckBox from "@/components/CheckBox";
 
 import Colors from "@/constants/Colors";
 
@@ -24,6 +25,7 @@ interface ToastProps {
   like: number;
   added: boolean;
   checkBoxVisible?: boolean;
+  checked?: boolean;
   onCheckChange?: (checked: boolean) => void;
   my?: boolean;
   picture?: string;
@@ -37,6 +39,7 @@ function Toast({
   like,
   added,
   checkBoxVisible,
+  checked,
   onCheckChange,
   my,
   picture,
@@ -46,6 +49,12 @@ function Toast({
   return (
     <RowFlex style={[styles.root, style]} gap={10}>
       <RowFlex style={styles.left} gap={10}>
+        {checkBoxVisible && (
+          <CheckBox
+            checked={checked ?? false}
+            onChange={onCheckChange ?? (() => {})}
+          />
+        )}
         <ToastIcon size={40} picture={picture} like={{ count: like, added }} />
         <ColumnFlex style={styles.info}>
           <RowFlex style={styles.title} gap={5}>
