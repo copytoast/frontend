@@ -28,6 +28,7 @@ export default function Term() {
   const session = React.useContext(SessionContext);
 
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   const dynamicStyles = {
     root: {
@@ -43,7 +44,11 @@ export default function Term() {
 
   // 다음 버튼 핸들러
   function handleNext() {
+    if (loading) return;
+    setLoading(true);
+
     setTimeout(() => {
+      setLoading(false);
       session.dispatch(sampleSession);
     }, 500);
   }
@@ -102,6 +107,7 @@ export default function Term() {
             iconSize={24}
             style={styles.bottomButton}
             onPress={handleNext}
+            loading={loading}
           />
         </BottomButton>
       </View>
