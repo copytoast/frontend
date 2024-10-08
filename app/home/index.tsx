@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 
 import ColumnFlex from "@/components/ColumnFlex";
 import Section from "@/components/Section";
@@ -9,6 +9,7 @@ import Toast from "@/components/Toast";
 export default function Home() {
   return (
     <ColumnFlex style={styles.root}>
+      <StatusBar barStyle={"dark-content"} />
       <Section
         title="내가 담은 암기빵"
         titleIcon={<GreyLogo width={20} height={20} />}

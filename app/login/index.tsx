@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
 import Logo from "@/assets/vectors/logo.svg";
@@ -20,6 +20,7 @@ export default function Index() {
 
   return (
     <ColumnFlex style={styles.root} width={"100%"} height={"100%"}>
+      <StatusBar barStyle={"dark-content"} />
       {/* 로고 */}
       <ColumnFlex
         style={styles.content}

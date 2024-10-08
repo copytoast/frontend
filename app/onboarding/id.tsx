@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
 import Colors from "@/constants/Colors";
@@ -43,6 +43,7 @@ export default function Username() {
 
   return (
     <ColumnFlex style={dynamicStyles.root}>
+      <StatusBar barStyle={"dark-content"} />
       {/* 상단 */}
       <ColumnFlex gap={10} style={styles.top}>
         <Typography size={30} weight={"bold"}>
