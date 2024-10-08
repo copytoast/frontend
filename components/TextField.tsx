@@ -28,6 +28,7 @@ function TextField({
   icon,
   width,
   height,
+  selectionColor = Colors.primary,
   ...props
 }: TextFieldProps) {
   const [value, setValue] = React.useState(
@@ -85,6 +86,7 @@ function TextField({
       {icon && <View style={styles.icon}>{icon}</View>}
       <TextInput
         {...props}
+        selectionColor={selectionColor}
         style={styles.textInput}
         value={value}
         onChange={handleChange}
