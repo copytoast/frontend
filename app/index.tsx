@@ -6,8 +6,11 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StackActions } from "@react-navigation/native";
 
 import { SessionContext } from "@/contexts/Session";
+
 import Colors from "@/constants/Colors";
+
 import DrawerHeader from "@/components/DrawerHeader";
+import DrawerContent from "@/components/DrawerContent";
 
 import HomeScreen from "@/app/home";
 
@@ -25,6 +28,13 @@ export default function Index() {
   }, [loggedIn]);
   if (!loggedIn) return <Redirect href={"/login"} />;
 
+  function handleLogout() {
+    session.dispatch({
+      user: undefined,
+      token: undefined,
+    });
+  }
+
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -33,6 +43,9 @@ export default function Index() {
         headerStyle: styles.header,
         sceneContainerStyle: styles.content,
       }}
+      drawerContent={(props) => (
+        <DrawerContent onLogout={handleLogout} {...props} />
+      )}
     >
       <Drawer.Screen name="홈" component={HomeScreen} />
     </Drawer.Navigator>
