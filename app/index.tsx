@@ -13,8 +13,16 @@ import DrawerHeader from "@/components/DrawerHeader";
 import DrawerContent from "@/components/DrawerContent";
 
 import HomeScreen from "@/app/home";
+import MyToastScreen from "@/app/toast/my";
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<ParamList>();
+
+export type ParamList = {
+  홈: undefined;
+  암기빵: undefined;
+  둘러보기: undefined;
+  친구: undefined;
+};
 
 export default function Index() {
   const session = React.useContext(SessionContext);
@@ -37,7 +45,8 @@ export default function Index() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      id="main"
+      initialRouteName="홈"
       screenOptions={{
         header: DrawerHeader,
         headerStyle: styles.header,
@@ -48,6 +57,7 @@ export default function Index() {
       )}
     >
       <Drawer.Screen name="홈" component={HomeScreen} />
+      <Drawer.Screen name="암기빵" component={MyToastScreen} />
     </Drawer.Navigator>
   );
 }

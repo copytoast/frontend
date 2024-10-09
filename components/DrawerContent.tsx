@@ -31,6 +31,30 @@ export default function DrawerContent(props: DrawerContentProps) {
 
   const currentRoute = props.state.routeNames[props.state.index];
 
+  interface RouteButtonProps {
+    name: string;
+    icon: React.ReactNode;
+    color?: string;
+    onPress?: () => void;
+  }
+
+  const RouteButton = ({
+    name,
+    onPress,
+    ...routeButtonProps
+  }: RouteButtonProps) => (
+    <Button
+      label={name}
+      style={styles.route}
+      contentStyle={styles.routeContent}
+      fontSize={18}
+      fontWeight={"medium"}
+      color={currentRoute === name ? Colors.greyLighter : Colors.white}
+      onPress={onPress ? onPress : () => props.navigation.navigate(name)}
+      {...routeButtonProps}
+    />
+  );
+
   return (
     <SafeAreaView style={[styles.safeArea, dynamicStyles.safeArea]}>
       <ColumnFlex gap={10} style={styles.root}>
@@ -39,36 +63,21 @@ export default function DrawerContent(props: DrawerContentProps) {
         </View>
 
         <ColumnFlex gap={5} style={styles.routeContainer}>
+          <RouteButton name={"홈"} icon={<HomeIcon width={24} height={24} />} />
           <RouteButton
-            label={"홈"}
-            color={currentRoute === "홈" ? Colors.greyLighter : Colors.white}
-            icon={<HomeIcon width={24} height={24} />}
-            onPress={() => props.navigation.navigate("/")}
-          />
-          <RouteButton
-            label={"암기빵"}
-            color={
-              currentRoute === "암기빵" ? Colors.greyLighter : Colors.white
-            }
+            name={"암기빵"}
             icon={<GreyLogo width={24} height={24} />}
-            onPress={() => props.navigation.navigate("/toast/my")}
           />
           <RouteButton
-            label={"둘러보기"}
-            color={
-              currentRoute === "둘러보기" ? Colors.greyLighter : Colors.white
-            }
+            name={"둘러보기"}
             icon={<ExploreIcon width={24} height={24} />}
-            onPress={() => props.navigation.navigate("/explore")}
           />
           <RouteButton
-            label={"친구"}
-            color={currentRoute === "친구" ? Colors.greyLighter : Colors.white}
+            name={"친구"}
             icon={<PeopleIcon width={24} height={24} />}
-            onPress={() => props.navigation.navigate("/friend")}
           />
           <RouteButton
-            label={"로그아웃"}
+            name={"로그아웃"}
             icon={<LogoutIcon width={24} height={24} />}
             onPress={props.onLogout}
           />
@@ -77,24 +86,6 @@ export default function DrawerContent(props: DrawerContentProps) {
     </SafeAreaView>
   );
 }
-
-interface RouteButtonProps {
-  label: string;
-  icon: React.ReactNode;
-  color?: string;
-  onPress?: () => void;
-}
-
-const RouteButton = (props: RouteButtonProps) => (
-  <Button
-    style={styles.route}
-    contentStyle={styles.routeContent}
-    fontSize={18}
-    fontWeight={"medium"}
-    color={Colors.white}
-    {...props}
-  />
-);
 
 const styles = StyleSheet.create({
   safeArea: {
