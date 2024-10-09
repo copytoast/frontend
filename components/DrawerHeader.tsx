@@ -18,7 +18,7 @@ export default function DrawerHeader(props: DrawerHeaderProps) {
   const dynamicStyles = {
     safeArea: {
       height:
-        50 + (Platform.OS === "android" ? StatusBar.currentHeight ?? 0 : 0),
+        60 + (Platform.OS === "android" ? StatusBar.currentHeight ?? 0 : 0),
     },
   };
 

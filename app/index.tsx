@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   header: {
-    height: 50,
+    height: 60,
   },
   content: {
     backgroundColor: Colors.greyLighter,
