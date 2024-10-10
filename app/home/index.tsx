@@ -1,6 +1,6 @@
 import { ScrollView, StatusBar, StyleSheet } from "react-native";
 
-import Pop, { Piece } from "@/components/Pop";
+import Pop from "@/components/Pop";
 import MyToastSection from "@/components/home/MyToastSection";
 
 export default function Home() {
@@ -8,18 +8,7 @@ export default function Home() {
     <ScrollView>
       <StatusBar barStyle={"dark-content"} />
       <Pop style={styles.root} visible>
-        <Piece key="toast_section">
-          <MyToastSection />
-        </Piece>
-        <Piece key="toast_section1">
-          <MyToastSection />
-        </Piece>
-        <Piece key="toast_section2">
-          <MyToastSection />
-        </Piece>
-        <Piece key="toast_section3">
-          <MyToastSection />
-        </Piece>
+        <MyToastSection key="toast_section" />
       </Pop>
     </ScrollView>
   );

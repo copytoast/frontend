@@ -9,28 +9,40 @@ import {
 
 interface PopProps {
   visible: boolean;
-  children:
-    | React.ReactElement<PieceProps, typeof Piece>
-    | React.ReactElement<PieceProps, typeof Piece>[];
+  children: React.ReactElement | React.ReactElement[];
   style?: StyleProp<ViewStyle>;
 }
 
+interface ReactElementWithKey extends React.ReactElement {
+  key: string;
+}
+
 export default function Pop({ visible, children, style }: PopProps) {
-  const components = Array.isArray(children) ? children : [children];
+  const elements = (
+    React.Children.toArray(children) as React.ReactElement[]
+  ).filter((child): child is ReactElementWithKey => child.key !== null);
   const animated = React.useRef<Record<string, Animated.Value>>({});
 
   React.useEffect(() => {
-    if (!visible) return;
-
-    Object.keys(animated.current).forEach((key, index) => {
-      Animated.timing(animated.current[key], {
-        toValue: 1,
-        duration: 500,
-        delay: index * 100,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }).start();
-    });
+    if (visible)
+      Object.keys(animated.current).forEach((key, index) => {
+        Animated.timing(animated.current[key], {
+          toValue: 1,
+          duration: 300,
+          delay: index * 100,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }).start();
+      });
+    else
+      Object.keys(animated.current).forEach((key) => {
+        Animated.timing(animated.current[key], {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.in(Easing.cubic),
+          useNativeDriver: true,
+        }).start();
+      });
   }, [visible]);
 
   function getStyle(key: string) {
@@ -53,23 +65,11 @@ export default function Pop({ visible, children, style }: PopProps) {
 
   return (
     <View style={style}>
-      {components.map(
-        (child) =>
-          child.key && (
-            <Animated.View key={child.key} style={getStyle(child.key)}>
-              {child.props.children}
-            </Animated.View>
-          )
-      )}
+      {elements.map((element) => (
+        <Animated.View key={element.key} style={getStyle(element.key)}>
+          {element}
+        </Animated.View>
+      ))}
     </View>
   );
-}
-
-interface PieceProps {
-  children: React.ReactNode;
-  key: string;
-}
-
-export function Piece({ children, key }: PieceProps) {
-  return <>{children}</>;
 }
