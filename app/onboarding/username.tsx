@@ -15,10 +15,14 @@ import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
+import userExists from "@/api/userExists";
+
 export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
 
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
+  const [error, setError] = React.useState<string>();
+  const [loading, setLoading] = React.useState(false);
 
   const dynamicStyles = {
     root: {
@@ -27,7 +31,8 @@ export default function Username() {
     },
   };
 
-  const nextButtonEnabled = onboarding.state.username.length > 0;
+  const nextButtonEnabled =
+    onboarding.state.username.length > 0 && error === undefined && !loading;
 
   // 돌아가기 버튼 핸들러
   function handleBack() {
@@ -35,8 +40,24 @@ export default function Username() {
   }
 
   // 다음 버튼 핸들러
-  function handleNext() {
+  async function handleNext() {
+    if (!nextButtonEnabled) return;
+
+    setLoading(true);
+    const res = await userExists({ username: onboarding.state.username });
+    setLoading(false);
+
+    if (res.data.result.exists === true) {
+      setError("이름이 이미 사용되고 있어요.");
+      return;
+    }
     router.push("/onboarding/id");
+  }
+
+  // 수정 핸들러
+  function handleChangeText(text: string) {
+    onboarding.dispatch((prev) => ({ ...prev, username: text }));
+    if (error) setError(undefined);
   }
 
   return (
@@ -59,11 +80,15 @@ export default function Username() {
           placeholder={"이름"}
           variant={"standard"}
           value={onboarding.state.username}
-          onChangeText={(username) => {
-            onboarding.dispatch((prev) => ({ ...prev, username }));
-          }}
+          onChangeText={handleChangeText}
           onSubmitEditing={handleNext}
+          editable={!loading}
         />
+        {error && (
+          <Typography color={Colors.red} weight={"medium"}>
+            {error}
+          </Typography>
+        )}
       </View>
 
       {/* 하단 */}
@@ -85,8 +110,9 @@ export default function Username() {
             icon={<ArrowForward />}
             iconSize={24}
             style={styles.bottomButton}
-            onPress={nextButtonEnabled ? handleNext : undefined}
+            onPress={handleNext}
             disabled={!nextButtonEnabled}
+            loading={loading}
           />
         </BottomButton>
       </View>

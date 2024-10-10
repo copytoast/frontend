@@ -40,6 +40,12 @@ function TextField({
     if (props.onChange) props.onChange(e);
   }
 
+  const color = (() => {
+    if (props.editable === false) return Colors.greyLight;
+    if (value === "") return Colors.greyLight;
+    return Colors.grey;
+  })();
+
   // 스타일
   const styles = StyleSheet.create({
     root: {
@@ -57,7 +63,7 @@ function TextField({
       height: "100%",
       fontFamily: "PretendardMedium",
       fontSize: 18,
-      color: value === "" ? Colors.greyLight : Colors.grey,
+      color,
     },
     icon: {
       width: 24,
@@ -66,7 +72,7 @@ function TextField({
     underline: {
       width: "100%",
       height: 2,
-      backgroundColor: value === "" ? Colors.greyLight : Colors.grey,
+      backgroundColor: color,
       position: "absolute",
       bottom: 0,
     },

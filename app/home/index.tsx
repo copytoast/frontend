@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingVertical: 20,
     paddingHorizontal: 10,
-    gap: 20,
+    gap: 10,
   },
   sectionContent: {
     padding: 5,

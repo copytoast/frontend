@@ -5,6 +5,9 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { SessionProvider } from "@/contexts/Session";
 
+// for test
+import "@/test";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
