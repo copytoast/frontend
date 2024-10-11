@@ -21,11 +21,13 @@ export default function Pop({ visible, children, style }: PopProps) {
   const elements = (
     React.Children.toArray(children) as React.ReactElement[]
   ).filter((child): child is ReactElementWithKey => child.key !== null);
+  const [ready, setReady] = React.useState(true);
   const animated = React.useRef<Record<string, Animated.Value>>({});
 
   React.useEffect(() => {
-    if (visible)
+    if (visible && ready)
       Object.keys(animated.current).forEach((key, index) => {
+        animated.current[key].setValue(0);
         Animated.timing(animated.current[key], {
           toValue: 1,
           duration: 300,
@@ -34,30 +36,43 @@ export default function Pop({ visible, children, style }: PopProps) {
           useNativeDriver: true,
         }).start();
       });
-    else
-      Object.keys(animated.current).forEach((key, index, arr) => {
+    else if (!visible) {
+      setReady(false);
+      Object.keys(animated.current).forEach((key) => {
         Animated.timing(animated.current[key], {
-          toValue: 0,
-          duration: 300,
-          delay: (arr.length - index - 1) * 50,
+          toValue: 2,
+          duration: 150,
           easing: Easing.in(Easing.cubic),
           useNativeDriver: true,
-        }).start();
+        }).start(({ finished }) => {
+          if (!finished) return;
+          setReady(true);
+        });
       });
-  }, [visible]);
+    }
+  }, [visible, ready]);
 
   function getStyle(key: string) {
     if (!(key in animated.current))
-      animated.current[key] = new Animated.Value(0);
+      animated.current[key] = new Animated.Value(2);
     const aniamtedValue = animated.current[key];
 
     return {
-      opacity: aniamtedValue,
+      opacity: aniamtedValue.interpolate({
+        inputRange: [0, 1, 2],
+        outputRange: [0, 1, 0],
+      }),
       transform: [
         {
           translateY: aniamtedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [50, 0],
+            inputRange: [0, 1, 2],
+            outputRange: [50, 0, 0],
+          }),
+        },
+        {
+          scale: aniamtedValue.interpolate({
+            inputRange: [0, 1, 2],
+            outputRange: [1, 1, 0.9],
           }),
         },
       ],

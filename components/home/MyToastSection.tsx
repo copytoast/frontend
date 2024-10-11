@@ -66,7 +66,7 @@ export default function MyToastSection({
       onTitlePress={handleMyToast}
       titleArrowVisible
     >
-      {toasts && !refreshing ? (
+      {toasts && (
         <Pop
           style={styles.content}
           visible={toasts !== undefined && !refreshing}
@@ -83,12 +83,6 @@ export default function MyToastSection({
             />
           ))}
         </Pop>
-      ) : (
-        <View style={[styles.content, styles.skeletonContainer]}>
-          <ToastSkeleton />
-          <ToastSkeleton />
-          <ToastSkeleton />
-        </View>
       )}
 
       <RowFlex gap={10} style={styles.quickButtonContainer}>
