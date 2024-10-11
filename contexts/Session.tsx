@@ -26,10 +26,7 @@ interface SessionProviderProps {
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
-  const [state, dispatch] = React.useState<Session>({
-    user: undefined,
-    token: undefined,
-  });
+  const [state, dispatch] = React.useState<Session>(initialState);
 
   return (
     <SessionContext.Provider value={{ state, dispatch }}>

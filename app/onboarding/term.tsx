@@ -11,20 +11,15 @@ import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
 import { SessionContext } from "@/contexts/Session";
+import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 import Arrow from "@/assets/vectors/arrow.svg";
 
-// sample data
-const sampleSession = {
-  token: "sample_token",
-  user: {
-    username: "관리자",
-    id: "admin",
-  },
-};
+import signup from "@/api/signup";
 
 export default function Term() {
+  const onboarding = React.useContext(OnboardingContext);
   const session = React.useContext(SessionContext);
 
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
@@ -37,20 +32,35 @@ export default function Term() {
     },
   };
 
+  const nextButtonEnabled = !loading;
+
   // 돌아가기 버튼 핸들러
   function handleBack() {
     router.back();
   }
 
   // 다음 버튼 핸들러
-  function handleNext() {
-    if (loading) return;
-    setLoading(true);
+  async function handleNext() {
+    if (!nextButtonEnabled) return;
 
-    setTimeout(() => {
-      setLoading(false);
-      session.dispatch(sampleSession);
-    }, 500);
+    setLoading(true);
+    const res = await signup({
+      ...onboarding.state,
+    });
+    setLoading(false);
+
+    if (res.data.code !== 1000) {
+      // TODO: 에러 처리
+      return;
+    }
+
+    session.dispatch({
+      user: {
+        id: onboarding.state.id,
+        username: onboarding.state.username,
+      },
+      token: res.data.result.token.accessToken.token,
+    });
   }
 
   return (
@@ -108,6 +118,7 @@ export default function Term() {
             iconSize={24}
             style={styles.bottomButton}
             onPress={handleNext}
+            disabled={!nextButtonEnabled}
             loading={loading}
           />
         </BottomButton>

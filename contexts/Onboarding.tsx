@@ -4,6 +4,8 @@ interface OnboardingData {
   username: string;
   id: string;
   toasts: number[];
+  OAuthProvider: "GOOGLE" | "KAKAO";
+  OAuthToken: string;
 }
 
 interface OnboardingContext {
@@ -15,6 +17,8 @@ export const initialState: OnboardingContext["state"] = {
   username: "",
   id: "",
   toasts: [],
+  OAuthProvider: "GOOGLE",
+  OAuthToken: "",
 };
 
 export const initialDispatch: OnboardingContext["dispatch"] = () => {};
@@ -29,11 +33,7 @@ interface OnboardingProviderProps {
 }
 
 export function OnboardingProvider({ children }: OnboardingProviderProps) {
-  const [state, dispatch] = React.useState<OnboardingData>({
-    username: "",
-    id: "",
-    toasts: [],
-  });
+  const [state, dispatch] = React.useState<OnboardingData>(initialState);
 
   return (
     <OnboardingContext.Provider value={{ state, dispatch }}>
