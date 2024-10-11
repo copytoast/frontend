@@ -12,6 +12,7 @@ import Button from "@/components/Button";
 import MinimalToast from "@/components/MinimalToast";
 import ToastDetailModal from "@/components/onboarding/ToastDetailModal";
 import Skeleton from "@/components/Skeleton";
+import Pop from "@/components/Pop";
 
 import { OnboardingContext } from "@/contexts/Onboarding";
 
@@ -63,6 +64,18 @@ const sampleToastDetail: Record<number, Toast> = {
     view: 0,
   },
 };
+
+const ToastSkeleton = () => (
+  <Skeleton isLoading>
+    <MinimalToast
+      name={""}
+      like={0}
+      added={false}
+      onAdd={() => {}}
+      onDetail={() => {}}
+    />
+  </Skeleton>
+);
 
 export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
@@ -144,9 +157,9 @@ export default function Username() {
       </ColumnFlex>
 
       {/* 콘텐츠 */}
-      <ColumnFlex gap={10} style={styles.content}>
-        {toasts ? (
-          toasts.map((toast) => (
+      {toasts ? (
+        <Pop style={styles.content} visible={toasts !== undefined}>
+          {toasts.map((toast) => (
             <MinimalToast
               name={toast.name}
               like={toast.like}
@@ -156,39 +169,15 @@ export default function Username() {
               onDetail={() => handleDetail(toast.id)}
               key={toast.id}
             />
-          ))
-        ) : (
-          <>
-            <Skeleton isLoading={!toasts}>
-              <MinimalToast
-                name={""}
-                like={0}
-                added={false}
-                onAdd={() => {}}
-                onDetail={() => {}}
-              />
-            </Skeleton>
-            <Skeleton isLoading={!toasts}>
-              <MinimalToast
-                name={""}
-                like={0}
-                added={false}
-                onAdd={() => {}}
-                onDetail={() => {}}
-              />
-            </Skeleton>
-            <Skeleton isLoading={!toasts}>
-              <MinimalToast
-                name={""}
-                like={0}
-                added={false}
-                onAdd={() => {}}
-                onDetail={() => {}}
-              />
-            </Skeleton>
-          </>
-        )}
-      </ColumnFlex>
+          ))}
+        </Pop>
+      ) : (
+        <ColumnFlex style={styles.content}>
+          <ToastSkeleton />
+          <ToastSkeleton />
+          <ToastSkeleton />
+        </ColumnFlex>
+      )}
 
       {/* 하단 */}
       <View
@@ -231,6 +220,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   content: {
+    gap: 10,
     padding: 20,
   },
   bottom: {
