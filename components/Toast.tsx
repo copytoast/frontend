@@ -23,7 +23,7 @@ import MoreIcon from "@/assets/vectors/more.svg";
 interface ToastProps {
   name: string;
   description: string;
-  like: number;
+  addCount: number;
   added: boolean;
   checkBoxVisible?: boolean;
   checked?: boolean;
@@ -37,7 +37,7 @@ interface ToastProps {
 function Toast({
   name,
   description,
-  like,
+  addCount,
   added,
   checkBoxVisible,
   checked,
@@ -56,7 +56,11 @@ function Toast({
             onChange={onCheckChange ?? (() => {})}
           />
         )}
-        <ToastIcon size={40} picture={picture} like={{ count: like, added }} />
+        <ToastIcon
+          size={40}
+          picture={picture}
+          like={{ count: addCount, added }}
+        />
         <ColumnFlex style={styles.info}>
           <RowFlex style={styles.title} gap={5}>
             <Typography size={16} weight="bold" color={Colors.greyDark}>

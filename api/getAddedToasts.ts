@@ -1,7 +1,8 @@
 import axiosInstance, { type CommonResponse } from ".";
 
 interface GetAddedToastsProps {
-  id: number;
+  count: number;
+  offset?: number;
 }
 
 export interface Toast {
@@ -19,15 +20,16 @@ export interface Toast {
 }
 
 export interface GetAddedToastsResult {
-  toast: Toast;
+  toasts: Toast[];
 }
 
 type Response = CommonResponse<GetAddedToastsResult>;
 
-export default function getToast({ id }: GetAddedToastsProps) {
-  return axiosInstance.get<Response>("/toast", {
+export default function getAddedToasts({ count, offset }: GetAddedToastsProps) {
+  return axiosInstance.get<Response>("/toast/added", {
     params: {
-      id,
+      count,
+      offset,
     },
   });
 }

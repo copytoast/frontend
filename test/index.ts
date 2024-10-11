@@ -4,3 +4,4 @@ import "./userExists";
 import "./getRecommendedToasts";
 import "./getToast";
 import "./signup";
+import "./getAddedToasts";

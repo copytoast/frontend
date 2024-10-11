@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 
@@ -8,19 +9,51 @@ import Section from "@/components/Section";
 import Toast from "@/components/Toast";
 import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
+import Pop from "@/components/Pop";
+import Skeleton from "@/components/Skeleton";
+
 import Colors from "@/constants/Colors";
 
 import GreyLogo from "@/assets/vectors/logo_grey.svg";
 import AddIcon from "@/assets/vectors/add.svg";
 import ListIcon from "@/assets/vectors/list.svg";
 
+import { SessionContext } from "@/contexts/Session";
+
+import getAddedToasts, {
+  type GetAddedToastsResult,
+} from "@/api/getAddedToasts";
+
 import type { ParamList } from "@/app";
+
+const ToastSkeleton = () => (
+  <Skeleton containerStyle={styles.skeleton} isLoading />
+);
 
 export default function MyToastSection() {
   // TODO: never 타입 제거
   const navigation = useNavigation().getParent<DrawerNavigationProp<ParamList>>(
     "main" as never
   );
+  const sessionContext = React.useContext(SessionContext);
+
+  const [toasts, setToasts] = React.useState<GetAddedToastsResult["toasts"]>();
+
+  React.useEffect(() => {
+    (async () => {
+      const res = await getAddedToasts({
+        count: 5,
+      });
+      const result = res.data.result;
+
+      if (res.data.code !== 1000 || result === undefined) {
+        // TODO: 에러 처리
+        return;
+      }
+
+      setToasts(result.toasts);
+    })();
+  }, [sessionContext.state]);
 
   function handleMyToast() {
     navigation.navigate("암기빵");
@@ -37,16 +70,27 @@ export default function MyToastSection() {
       onTitlePress={handleMyToast}
       titleArrowVisible
     >
-      <ColumnFlex style={styles.content}>
-        <Toast
-          name="수능 영단어 1,000선"
-          description="대학수학능력시험 영어 영역에 빈출되는 영단어 1,000개를 모아놓았어요."
-          like={10}
-          added
-          my
-          detailButtonVisible
-        />
-      </ColumnFlex>
+      {toasts ? (
+        <Pop style={styles.content} visible={toasts !== undefined}>
+          {toasts.map((toast) => (
+            <Toast
+              key={toast.id}
+              name={toast.name}
+              description={toast.description}
+              addCount={toast.addCount}
+              added={toast.added}
+              my={toast.creator === sessionContext.state.user?.username}
+              detailButtonVisible
+            />
+          ))}
+        </Pop>
+      ) : (
+        <ColumnFlex style={[styles.content, styles.skeletonContainer]}>
+          <ToastSkeleton />
+          <ToastSkeleton />
+          <ToastSkeleton />
+        </ColumnFlex>
+      )}
       <RowFlex gap={10} style={styles.quickButtonContainer}>
         <Button
           label={`새 암기빵\n만들기`}
@@ -79,6 +123,14 @@ const styles = StyleSheet.create({
   content: {
     padding: 5,
     paddingTop: 0,
+  },
+  skeleton: {
+    height: 40,
+    width: "100%",
+  },
+  skeletonContainer: {
+    gap: 10,
+    padding: 15,
   },
   quickButtonContainer: {
     padding: 10,
