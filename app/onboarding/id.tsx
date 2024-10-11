@@ -47,12 +47,19 @@ export default function Username() {
 
     setLoading(true);
     const res = await userExists({ id: onboarding.state.id });
+    const result = res.data.result;
     setLoading(false);
 
-    if (res.data.result.exists === true) {
+    if (res.data.code !== 1000 || result === undefined) {
+      setError(res.data.message);
+      return;
+    }
+
+    if (result.exists === true) {
       setError("아이디가 이미 사용되고 있어요.");
       return;
     }
+
     router.push("/onboarding/toast");
   }
 

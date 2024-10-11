@@ -1,6 +1,6 @@
 import axiosInstance, { type CommonResponse } from ".";
 
-interface GetToastProps {
+interface GetAddedToastsProps {
   id: number;
 }
 
@@ -15,16 +15,16 @@ export interface Toast {
   creator: string;
   createdAt: string;
   updatedAt: string;
-  added?: boolean;
+  added: boolean;
 }
 
-export interface GetToastResult {
+export interface GetAddedToastsResult {
   toast: Toast;
 }
 
-type Response = CommonResponse<GetToastResult>;
+type Response = CommonResponse<GetAddedToastsResult>;
 
-export default function getToast({ id }: GetToastProps) {
+export default function getToast({ id }: GetAddedToastsProps) {
   return axiosInstance.get<Response>("/toast", {
     params: {
       id,

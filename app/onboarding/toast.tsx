@@ -46,14 +46,22 @@ export default function Username() {
     React.useState<GetRecommendedToastsResult["toasts"]>();
 
   React.useEffect(() => {
-    getRecommendedToasts({ count: 3 }).then((res) => {
+    (async () => {
+      const res = await getRecommendedToasts({ count: 3 });
+
+      const result = res.data.result;
+      if (res.data.code !== 1000 || result === undefined) {
+        // TODO: 에러 처리
+        return;
+      }
+
       setToasts(
-        res.data.result.toasts.map((toast) => ({
+        result.toasts.map((toast) => ({
           ...toast,
           added: false,
         }))
       );
-    });
+    })();
   }, []);
 
   // 모달 닫기 핸들러
@@ -91,22 +99,24 @@ export default function Username() {
   }
 
   // 암기빵 상세 핸들러
-  function handleDetail(toastId: number) {
+  async function handleDetail(toastId: number) {
     setDetailModalOpen(true);
     setToastDetail(undefined);
-    getToast({ id: toastId }).then((res) => {
-      const previewToast = toasts?.find((toast) => toast.id === toastId);
-      const toast = res.data.result.toast;
+    const res = await getToast({ id: toastId });
+    const result = res.data.result;
 
-      if (toast === undefined) {
-        setDetailModalOpen(false);
-        return;
-      }
+    if (res.data.code !== 1000 || result === undefined) {
+      // TODO: 에러 처리
+      setDetailModalOpen(false);
+      return;
+    }
 
-      setToastDetail({
-        ...toast,
-        added: previewToast?.added ?? false,
-      });
+    const previewToast = toasts?.find((toast) => toast.id === toastId);
+    const toast = result.toast;
+
+    setToastDetail({
+      ...toast,
+      added: previewToast?.added ?? false,
     });
   }
 

@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 export interface CommonResponse<T> {
   code: number;
   message: string;
-  result: T;
+  result?: T;
 }
 
 export default axiosInstance;

@@ -49,7 +49,8 @@ export default function Term() {
     });
     setLoading(false);
 
-    if (res.data.code !== 1000) {
+    const result = res.data.result;
+    if (res.data.code !== 1000 || result === undefined) {
       // TODO: 에러 처리
       return;
     }
@@ -59,7 +60,7 @@ export default function Term() {
         id: onboarding.state.id,
         username: onboarding.state.username,
       },
-      token: res.data.result.token.accessToken.token,
+      token: result.token.accessToken.token,
     });
   }
 

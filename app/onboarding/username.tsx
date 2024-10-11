@@ -45,12 +45,19 @@ export default function Username() {
 
     setLoading(true);
     const res = await userExists({ username: onboarding.state.username });
+    const result = res.data.result;
     setLoading(false);
 
-    if (res.data.result.exists === true) {
+    if (res.data.code !== 1000 || result === undefined) {
+      setError(res.data.message);
+      return;
+    }
+
+    if (result.exists === true) {
       setError("이름이 이미 사용되고 있어요.");
       return;
     }
+
     router.push("/onboarding/id");
   }
 
