@@ -5,11 +5,11 @@ interface UserExistsProps {
   id?: string;
 }
 
-interface Result {
+export interface UserExistsResult {
   exists: boolean;
 }
 
-type Response = CommonResponse<Result>;
+type Response = CommonResponse<UserExistsResult>;
 
 export default function userExists({ username, id }: UserExistsProps) {
   return axiosInstance.get<Response>("/user/exists", {

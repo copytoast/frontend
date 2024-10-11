@@ -18,58 +18,16 @@ import { OnboardingContext } from "@/contexts/Onboarding";
 
 import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
-import type { Toast, BasicToast } from "@/types/Toast";
-
-// sample data
-const sampleToasts: BasicToast[] = [
-  {
-    id: 0,
-    name: "수능 영단어 1,000선",
-    like: 100000,
-  },
-  {
-    id: 1,
-    name: "주기율표",
-    like: 8431,
-  },
-];
-
-const sampleToastDetail: Record<number, Toast> = {
-  0: {
-    id: 0,
-    name: "수능 영단어 1,000선",
-    like: 100000,
-    creator: "관리자",
-    createdAt: "2021-08-01",
-    updatedAt: "2021-08-01",
-    description:
-      "수능 영단어 1,000선은 수능 영어 시험에서 자주 나오는 영어 단어 1,000개를 모아놓은 암기빵입니다.",
-    added: true,
-    type: "MATCHING",
-    memoryRate: 0,
-    view: 0,
-  },
-  1: {
-    id: 1,
-    name: "주기율표",
-    like: 8431,
-    creator: "관리자",
-    createdAt: "2021-08-01",
-    updatedAt: "2021-08-01",
-    description:
-      "주기율표는 화학에서 사용되는 주기율표를 모아놓은 암기빵입니다.",
-    added: true,
-    type: "ORDER",
-    memoryRate: 0,
-    view: 0,
-  },
-};
+import getRecommendedToasts, {
+  type GetRecommendedToastsResult,
+} from "@/api/getRecommendedToasts";
+import getToast, { type GetToastResult } from "@/api/getToast";
 
 const ToastSkeleton = () => (
   <Skeleton isLoading>
     <MinimalToast
       name={""}
-      like={0}
+      addCount={0}
       added={false}
       onAdd={() => {}}
       onDetail={() => {}}
@@ -81,14 +39,22 @@ export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
 
   const [detailModalOpen, setDetailModalOpen] = React.useState(false);
-  const [toastDetail, setToastDetail] = React.useState<Toast>();
+  const [toastDetail, setToastDetail] =
+    React.useState<NonNullable<GetToastResult["toast"]>>();
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
-  const [toasts, setToasts] = React.useState<BasicToast[]>();
+  const [toasts, setToasts] =
+    React.useState<GetRecommendedToastsResult["toasts"]>();
 
   React.useEffect(() => {
-    // TODO: fetch toasts
-    setTimeout(() => setToasts(sampleToasts), 500);
-  });
+    getRecommendedToasts({ count: 3 }).then((res) => {
+      setToasts(
+        res.data.result.toasts.map((toast) => ({
+          ...toast,
+          added: false,
+        }))
+      );
+    });
+  }, []);
 
   // 모달 닫기 핸들러
   function handleModalClose() {
@@ -99,13 +65,6 @@ export default function Username() {
   function handleModalAdd(toastId: number) {
     handleAdd(toastId);
   }
-
-  const dynamicStyles = {
-    root: {
-      flex: 1,
-      paddingBottom: bottomButtonHeight,
-    },
-  };
 
   // 돌아가기 버튼 핸들러
   function handleBack() {
@@ -134,13 +93,29 @@ export default function Username() {
   // 암기빵 상세 핸들러
   function handleDetail(toastId: number) {
     setDetailModalOpen(true);
-
-    // TODO: fetch toast detail
     setToastDetail(undefined);
-    setTimeout(() => {
-      setToastDetail(sampleToastDetail[toastId]);
-    }, 500);
+    getToast({ id: toastId }).then((res) => {
+      const previewToast = toasts?.find((toast) => toast.id === toastId);
+      const toast = res.data.result.toast;
+
+      if (toast === undefined) {
+        setDetailModalOpen(false);
+        return;
+      }
+
+      setToastDetail({
+        ...toast,
+        added: previewToast?.added ?? false,
+      });
+    });
   }
+
+  const dynamicStyles = {
+    root: {
+      flex: 1,
+      paddingBottom: bottomButtonHeight,
+    },
+  };
 
   return (
     <ColumnFlex style={dynamicStyles.root}>
@@ -162,7 +137,7 @@ export default function Username() {
           {toasts.map((toast) => (
             <MinimalToast
               name={toast.name}
-              like={toast.like}
+              addCount={toast.addCount}
               picture={toast.picture}
               added={onboarding.state.toasts.includes(toast.id)}
               onAdd={() => handleAdd(toast.id)}
@@ -205,7 +180,12 @@ export default function Username() {
 
       {/* 모달 */}
       <ToastDetailModal
-        toast={toastDetail}
+        toast={
+          toastDetail && {
+            ...toastDetail,
+            added: onboarding.state.toasts.includes(toastDetail?.id ?? 0),
+          }
+        }
         visible={detailModalOpen}
         onCancel={handleModalClose}
         onAdd={handleModalAdd}

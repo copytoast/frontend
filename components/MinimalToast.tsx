@@ -20,7 +20,7 @@ import ToastIcon from "./ToastIcon";
 
 interface MinimalToastProps {
   name: string;
-  like: number;
+  addCount: number;
   added: boolean;
   onAdd: () => void;
   onDetail: () => void;
@@ -30,7 +30,7 @@ interface MinimalToastProps {
 
 function MinimalToast({
   name,
-  like,
+  addCount,
   onAdd,
   onDetail,
   picture,
@@ -40,7 +40,11 @@ function MinimalToast({
   return (
     <RowFlex style={[styles.root, style]}>
       <RowFlex style={styles.left} gap={10}>
-        <ToastIcon size={40} picture={picture} like={{ count: like, added }} />
+        <ToastIcon
+          size={40}
+          picture={picture}
+          like={{ count: addCount, added }}
+        />
         <RowFlex style={styles.left} gap={5}>
           <Typography size={16} weight="medium" color={Colors.greyDark}>
             {name}

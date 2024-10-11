@@ -12,7 +12,18 @@ import EmptyHeartIcon from "@/assets/vectors/empty_heart_white.svg";
 
 import getRelativeTime from "@/utility/getRelativeTime";
 
-import type { Toast } from "@/types/Toast";
+export interface Toast {
+  id: number;
+  name: string;
+  description: string;
+  addCount: number;
+  picture?: string;
+  type: "MATCHING" | "ORDER" | "LIST" | "CLASSIFY" | "BLANK";
+  creator: string;
+  createdAt: string;
+  updatedAt: string;
+  added: boolean;
+}
 
 interface ToastDetailModalProps {
   toast?: Toast;
@@ -65,7 +76,7 @@ export default function ToastDetailModal({
               size={40}
               like={{
                 added: toast?.added ?? false,
-                count: toast?.like ?? 0,
+                count: toast?.addCount ?? 0,
               }}
             />
             <Typography size={20} weight={"bold"} color={Colors.greyDark}>

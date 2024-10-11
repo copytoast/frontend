@@ -29,16 +29,17 @@ export default function Pop({ visible, children, style }: PopProps) {
         Animated.timing(animated.current[key], {
           toValue: 1,
           duration: 300,
-          delay: index * 100,
+          delay: index * 50,
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }).start();
       });
     else
-      Object.keys(animated.current).forEach((key) => {
+      Object.keys(animated.current).forEach((key, index, arr) => {
         Animated.timing(animated.current[key], {
           toValue: 0,
           duration: 300,
+          delay: (arr.length - index - 1) * 50,
           easing: Easing.in(Easing.cubic),
           useNativeDriver: true,
         }).start();
