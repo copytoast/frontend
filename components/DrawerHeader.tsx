@@ -24,7 +24,7 @@ export default function DrawerHeader(props: DrawerHeaderProps) {
 
   return (
     <SafeAreaView style={dynamicStyles.safeArea}>
-      <RowFlex gap={15} style={styles.root}>
+      <RowFlex gap={10} style={styles.root}>
         <Button
           onPress={props.navigation.toggleDrawer}
           icon={<MenuIcon width={30} height={30} />}
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     bottom: 0,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     width: "100%",
-    height: 50,
+    height: 60,
   },
   searchBoxWrapper: {
     flex: 1,
