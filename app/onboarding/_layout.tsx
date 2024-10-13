@@ -9,7 +9,6 @@ import { EventArg, type NavigationAction } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
 
 import ProgressBar from "@/components/ProgressBar";
-import ColumnFlex from "@/components/ColumnFlex";
 import ExitModal from "@/components/onboarding/ExitModal";
 
 import { OnboardingProvider } from "@/contexts/Onboarding";
@@ -36,6 +35,8 @@ export default function OnboardingLayout() {
 
   const loggedIn =
     session.state.user !== undefined && session.state.token !== undefined;
+
+  const dynamicStyles = getDynamicStyles({ headerHeight });
 
   // 키보드 이벤트 감지
   React.useEffect(() => {
@@ -83,21 +84,10 @@ export default function OnboardingLayout() {
     setExitModalOpen(false);
   }
 
-  // 스타일
-  const dynamicStyles = {
-    root: {
-      paddingTop: headerHeight,
-    },
-  };
-
   if (loggedIn) return <Redirect href={"/"} />;
 
   return (
-    <ColumnFlex
-      style={[styles.root, dynamicStyles.root]}
-      width={"100%"}
-      height={"100%"}
-    >
+    <View style={[styles.root, dynamicStyles.root]}>
       <ScrollView
         keyboardShouldPersistTaps={"handled"}
         automaticallyAdjustKeyboardInsets
@@ -127,12 +117,14 @@ export default function OnboardingLayout() {
         onCancel={handleModalClose}
         onConfirm={handleModalConfirm}
       />
-    </ColumnFlex>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
+    width: "100%",
+    height: "100%",
     backgroundColor: Colors.white,
   },
   top: {
@@ -148,5 +140,15 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     flex: 1,
+  },
+});
+
+interface DynamicStylesProps {
+  headerHeight: number;
+}
+
+const getDynamicStyles = ({ headerHeight }: DynamicStylesProps) => ({
+  root: {
+    paddingTop: headerHeight,
   },
 });

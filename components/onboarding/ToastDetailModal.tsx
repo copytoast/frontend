@@ -1,5 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import ModalFrame from "@/components/ModalFrame";
 import Typography from "@/components/Typography";
 import Button from "@/components/Button";
@@ -7,8 +9,6 @@ import ToastIcon from "@/components/ToastIcon";
 import Skeleton from "@/components/Skeleton";
 
 import Colors from "@/constants/Colors";
-
-import EmptyHeartIcon from "@/assets/vectors/empty_heart_white.svg";
 
 import getRelativeTime from "@/utility/getRelativeTime";
 
@@ -42,24 +42,29 @@ export default function ToastDetailModal({
     <>
       <Button
         label={"닫기"}
-        color={Colors.grey}
+        backgroundColor={Colors.grey}
         onPress={onCancel}
-        style={styles.button}
+        style={staticStyles.button}
       />
 
       <Skeleton
         isLoading={!toast}
-        containerStyle={styles.buttonSkeleton}
-        gradientStyle={styles.buttonSkeletonGradient}
-        contentStyle={styles.button}
+        wrapperStyle={staticStyles.buttonSkeletonWrapper}
+        skeletonStyle={staticStyles.buttonSkeleton}
+        contentStyle={staticStyles.button}
       >
         <Button
           label={toast?.added ? "담기 취소" : "담기"}
-          color={Colors.primary}
-          icon={<EmptyHeartIcon />}
-          iconSize={20}
+          backgroundColor={Colors.primary}
+          icon={
+            <MaterialIcons
+              name={"favorite-border"}
+              size={20}
+              color={Colors.white}
+            />
+          }
           onPress={toast && (() => onAdd(toast.id))}
-          style={styles.button}
+          style={staticStyles.button}
         />
       </Skeleton>
     </>
@@ -67,10 +72,10 @@ export default function ToastDetailModal({
 
   return (
     <ModalFrame visible={visible} buttons={buttons}>
-      <View style={styles.content}>
-        <View style={styles.info}>
+      <View style={staticStyles.content}>
+        <View style={staticStyles.info}>
           {/* 제목 */}
-          <Skeleton isLoading={!toast} contentStyle={styles.name}>
+          <Skeleton isLoading={!toast} contentStyle={staticStyles.name}>
             <ToastIcon
               picture={toast?.picture}
               size={40}
@@ -104,13 +109,13 @@ export default function ToastDetailModal({
             </Typography>
           </Skeleton>
         </View>
-        <View style={styles.preview}></View>
+        <View style={staticStyles.preview}></View>
       </View>
     </ModalFrame>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   content: {
     gap: 20,
   },
@@ -129,11 +134,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.greyLighter,
     borderRadius: 5,
   },
-  buttonSkeleton: {
+  buttonSkeletonWrapper: {
     flex: 1,
     height: 50,
   },
-  buttonSkeletonGradient: {
+  buttonSkeleton: {
     borderRadius: 10,
   },
   button: {

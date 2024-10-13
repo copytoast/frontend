@@ -3,18 +3,16 @@ import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import Colors from "@/constants/Colors";
 
-import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
 
 import { SessionContext } from "@/contexts/Session";
 import { OnboardingContext } from "@/contexts/Onboarding";
-
-import ArrowForward from "@/assets/vectors/arrow_forward.svg";
-import Arrow from "@/assets/vectors/arrow.svg";
 
 import signup from "@/api/signup";
 
@@ -25,12 +23,7 @@ export default function Term() {
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
-  const dynamicStyles = {
-    root: {
-      flex: 1,
-      paddingBottom: bottomButtonHeight,
-    },
-  };
+  const dynamicStyles = getDynamicStyles({ bottomButtonHeight });
 
   const nextButtonEnabled = !loading;
 
@@ -65,43 +58,37 @@ export default function Term() {
   }
 
   return (
-    <ColumnFlex style={dynamicStyles.root}>
+    <View style={[staticStyles.root, dynamicStyles.root]}>
       <StatusBar barStyle={"dark-content"} />
       {/* 상단 */}
-      <ColumnFlex gap={10} style={styles.top}>
+      <View style={staticStyles.top}>
         <Typography size={30} weight={"bold"}>
           모두 완료됐어요.
         </Typography>
         <Typography size="medium" color={Colors.grey}>
           약관에 모두 동의하면 모든 가입 절차가 끝나요.
         </Typography>
-      </ColumnFlex>
+      </View>
 
       {/* 콘텐츠 */}
-      <View style={styles.content}>
-        <Button
+      <View style={staticStyles.content}>
+        <TermButton
           label={"서비스 이용 약관"}
-          style={styles.termButton}
-          contentStyle={styles.termButtonContent}
-          color={Colors.greyLighter}
-          icon={<Arrow />}
-          iconSize={20}
-          iconPosition={"right"}
+          onPress={() => {
+            // TODO: 약관 페이지로 이동
+          }}
         />
-        <Button
+        <TermButton
           label={"개인정보 취급 방침"}
-          style={styles.termButton}
-          contentStyle={styles.termButtonContent}
-          color={Colors.greyLighter}
-          icon={<Arrow />}
-          iconSize={20}
-          iconPosition={"right"}
+          onPress={() => {
+            // TODO: 개인정보 취급 방침 페이지로 이동
+          }}
         />
       </View>
 
       {/* 하단 */}
       <View
-        style={styles.bottom}
+        style={staticStyles.bottom}
         onLayout={(event) =>
           setBottomButtonHeight(event.nativeEvent.layout.height)
         }
@@ -114,22 +101,50 @@ export default function Term() {
         >
           <Button
             label={"모두 동의하고 가입 완료"}
-            color={Colors.primary}
-            icon={<ArrowForward />}
-            iconSize={24}
-            style={styles.bottomButton}
+            backgroundColor={Colors.primary}
+            icon={
+              <MaterialIcons
+                name={"arrow-forward"}
+                size={24}
+                color={Colors.white}
+              />
+            }
+            style={staticStyles.bottomButton}
             onPress={handleNext}
             disabled={!nextButtonEnabled}
             loading={loading}
           />
         </BottomButton>
       </View>
-    </ColumnFlex>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+interface TermButtonProps {
+  label: string;
+  onPress: () => void;
+}
+
+const TermButton = (props: TermButtonProps) => {
+  return (
+    <Button
+      label={props.label}
+      style={staticStyles.termButton}
+      contentStyle={staticStyles.termButtonContent}
+      backgroundColor={Colors.greyLighter}
+      icon={<MaterialIcons name={"arrow-forward"} size={20} />}
+      iconPosition={"right"}
+      onPress={props.onPress}
+    />
+  );
+};
+
+const staticStyles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   top: {
+    gap: 10,
     height: 200,
     padding: 20,
   },
@@ -141,6 +156,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   termButtonContent: {
+    width: "100%",
     justifyContent: "space-between",
     paddingHorizontal: 15,
   },
@@ -155,5 +171,15 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "100%",
     height: 50,
+  },
+});
+
+interface DynamicStylesProps {
+  bottomButtonHeight: number;
+}
+
+const getDynamicStyles = ({ bottomButtonHeight }: DynamicStylesProps) => ({
+  root: {
+    paddingBottom: bottomButtonHeight,
   },
 });

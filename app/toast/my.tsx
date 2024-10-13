@@ -1,14 +1,15 @@
 import React from "react";
 import {
+  View,
   RefreshControl,
   ScrollView,
   StatusBar,
   StyleSheet,
 } from "react-native";
 
-import ColumnFlex from "@/components/ColumnFlex";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import Pop from "@/components/Pop";
-import RowFlex from "@/components/RowFlex";
 
 import Colors from "@/constants/Colors";
 import CheckBox from "@/components/CheckBox";
@@ -16,8 +17,6 @@ import Typography from "@/components/Typography";
 import Button from "@/components/Button";
 
 import { SessionContext } from "@/contexts/Session";
-
-import EmptyFilterIcon from "@/assets/vectors/filter_empty.svg";
 
 import getAddedToasts, {
   type GetAddedToastsResult,
@@ -67,6 +66,15 @@ export default function My() {
     }
   }
 
+  // 암기빵 전체 선택 핸들러
+  function handleCheckAll(checked: boolean) {
+    if (checked) {
+      setCheckedToasts(toasts?.map((toast) => toast.id) ?? []);
+    } else {
+      setCheckedToasts([]);
+    }
+  }
+
   return (
     <ScrollView
       refreshControl={
@@ -74,24 +82,36 @@ export default function My() {
       }
     >
       <StatusBar barStyle={"dark-content"} />
-      <ColumnFlex style={styles.root}>
-        <RowFlex style={styles.header}>
-          <RowFlex gap={10}>
-            {toasts && (
-              <>
-                <CheckBox checked onChange={() => {}} />
-                <Typography size={16} weight={"medium"} color={Colors.greyDark}>
-                  {`총 ${toasts.length}개${
-                    checkedToasts.length > 0
-                      ? ` 중 ${checkedToasts.length}개 선택`
-                      : ""
-                  }`}
-                </Typography>
-              </>
-            )}
-          </RowFlex>
-          <Button icon={<EmptyFilterIcon width={24} height={24} />} />
-        </RowFlex>
+      <View style={styles.root}>
+        <View style={styles.header}>
+          {toasts && (
+            <>
+              <CheckBox
+                checked={checkedToasts.length > 0}
+                indeterminate={
+                  0 < checkedToasts.length &&
+                  checkedToasts.length < toasts.length
+                }
+                onChange={handleCheckAll}
+                color={Colors.grey}
+                label={`총 ${toasts.length}개${
+                  checkedToasts.length > 0
+                    ? ` 중 ${checkedToasts.length}개 선택`
+                    : ""
+                }`}
+              />
+            </>
+          )}
+          <Button
+            icon={
+              <MaterialIcons
+                name={"filter-alt"}
+                size={24}
+                color={Colors.grey}
+              />
+            }
+          />
+        </View>
         {toasts && (
           <Pop
             style={styles.content}
@@ -114,7 +134,7 @@ export default function My() {
             ))}
           </Pop>
         )}
-      </ColumnFlex>
+      </View>
     </ScrollView>
   );
 }
@@ -124,6 +144,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   header: {
+    flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 20,
     paddingHorizontal: 15,

@@ -3,9 +3,10 @@ import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import Colors from "@/constants/Colors";
 
-import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
@@ -16,24 +17,10 @@ import Pop from "@/components/Pop";
 
 import { OnboardingContext } from "@/contexts/Onboarding";
 
-import ArrowForward from "@/assets/vectors/arrow_forward.svg";
-
 import getRecommendedToasts, {
   type GetRecommendedToastsResult,
 } from "@/api/getRecommendedToasts";
 import getToast, { type GetToastResult } from "@/api/getToast";
-
-const ToastSkeleton = () => (
-  <Skeleton isLoading>
-    <MinimalToast
-      name={""}
-      addCount={0}
-      added={false}
-      onAdd={() => {}}
-      onDetail={() => {}}
-    />
-  </Skeleton>
-);
 
 export default function Username() {
   const onboarding = React.useContext(OnboardingContext);
@@ -45,6 +32,9 @@ export default function Username() {
   const [toasts, setToasts] =
     React.useState<GetRecommendedToastsResult["toasts"]>();
 
+  const dynamicStyles = getDynamicStyles({ bottomButtonHeight });
+
+  // 추천 암기빵 불러오기
   React.useEffect(() => {
     (async () => {
       const res = await getRecommendedToasts({ count: 3 });
@@ -120,18 +110,11 @@ export default function Username() {
     });
   }
 
-  const dynamicStyles = {
-    root: {
-      flex: 1,
-      paddingBottom: bottomButtonHeight,
-    },
-  };
-
   return (
-    <ColumnFlex style={dynamicStyles.root}>
+    <View style={[staticStyles.root, dynamicStyles.root]}>
       <StatusBar barStyle={"dark-content"} />
       {/* 상단 */}
-      <ColumnFlex gap={10} style={styles.top}>
+      <View style={staticStyles.top}>
         <Typography size={30} weight={"bold"}>
           암기빵을 담아주세요.
         </Typography>
@@ -139,11 +122,11 @@ export default function Username() {
           원하는 암기빵을 골라주세요. 지금 암기빵을 고르지 않고 나중에 나만의
           암기빵을 만들 수도 있어요.
         </Typography>
-      </ColumnFlex>
+      </View>
 
       {/* 콘텐츠 */}
       {toasts ? (
-        <Pop style={styles.content} visible={toasts !== undefined}>
+        <Pop style={staticStyles.content} visible={toasts !== undefined}>
           {toasts.map((toast) => (
             <MinimalToast
               name={toast.name}
@@ -157,16 +140,16 @@ export default function Username() {
           ))}
         </Pop>
       ) : (
-        <ColumnFlex style={styles.content}>
+        <View style={staticStyles.content}>
           <ToastSkeleton />
           <ToastSkeleton />
           <ToastSkeleton />
-        </ColumnFlex>
+        </View>
       )}
 
       {/* 하단 */}
       <View
-        style={styles.bottom}
+        style={staticStyles.bottom}
         onLayout={(event) =>
           setBottomButtonHeight(event.nativeEvent.layout.height)
         }
@@ -179,10 +162,15 @@ export default function Username() {
         >
           <Button
             label={"다음"}
-            color={Colors.primary}
-            icon={<ArrowForward />}
-            iconSize={24}
-            style={styles.bottomButton}
+            backgroundColor={Colors.primary}
+            icon={
+              <MaterialIcons
+                name={"arrow-forward"}
+                size={24}
+                color={Colors.white}
+              />
+            }
+            style={staticStyles.bottomButton}
             onPress={handleNext}
           />
         </BottomButton>
@@ -200,12 +188,28 @@ export default function Username() {
         onCancel={handleModalClose}
         onAdd={handleModalAdd}
       />
-    </ColumnFlex>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+const ToastSkeleton = () => (
+  <Skeleton isLoading>
+    <MinimalToast
+      name={""}
+      addCount={0}
+      added={false}
+      onAdd={() => {}}
+      onDetail={() => {}}
+    />
+  </Skeleton>
+);
+
+const staticStyles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   top: {
+    gap: 10,
     height: 200,
     padding: 20,
   },
@@ -224,5 +228,15 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "100%",
     height: 50,
+  },
+});
+
+interface DynamicStylesProps {
+  bottomButtonHeight: number;
+}
+
+const getDynamicStyles = ({ bottomButtonHeight }: DynamicStylesProps) => ({
+  root: {
+    paddingBottom: bottomButtonHeight,
   },
 });

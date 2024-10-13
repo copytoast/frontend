@@ -1,114 +1,143 @@
 import React from "react";
 
-import { View, Platform, StatusBar, StyleSheet } from "react-native";
+import { View, StatusBar, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import type { DrawerContentComponentProps } from "@react-navigation/drawer";
 
 import Colors from "@/constants/Colors";
 
-import ColumnFlex from "@/components/ColumnFlex";
 import Button from "@/components/Button";
 
 import GreyLogo from "@/assets/vectors/logo_grey.svg";
 import TextLogo from "@/assets/vectors/text_logo.svg";
-import HomeIcon from "@/assets/vectors/home.svg";
-import ExploreIcon from "@/assets/vectors/explore.svg";
-import PeopleIcon from "@/assets/vectors/people.svg";
-import LogoutIcon from "@/assets/vectors/logout.svg";
 
 interface DrawerContentProps extends DrawerContentComponentProps {
   onLogout: () => void;
 }
 
-export default function DrawerContent(props: DrawerContentProps) {
-  const dynamicStyles = {
-    safeArea: {
-      height:
-        50 + (Platform.OS === "android" ? StatusBar.currentHeight ?? 0 : 0),
-    },
-  };
+export default function DrawerContent({
+  onLogout,
+  state,
+  navigation,
+}: DrawerContentProps) {
+  const currentRoute = state.routeNames[state.index];
+  const dynamicStyles = getDynamicStyles({
+    statusBarHeight: StatusBar.currentHeight ?? 0,
+  });
 
-  const currentRoute = props.state.routeNames[props.state.index];
-
-  interface RouteButtonProps {
-    name: string;
-    icon: React.ReactNode;
-    color?: string;
-    onPress?: () => void;
+  function handleRouteButtonPress(route: string) {
+    navigation.navigate(route);
   }
 
-  const RouteButton = ({
-    name,
-    onPress,
-    ...routeButtonProps
-  }: RouteButtonProps) => (
-    <Button
-      label={name}
-      style={styles.route}
-      contentStyle={styles.routeContent}
-      fontSize={18}
-      fontWeight={"medium"}
-      color={currentRoute === name ? Colors.greyLighter : Colors.white}
-      onPress={onPress ? onPress : () => props.navigation.navigate(name)}
-      {...routeButtonProps}
-    />
-  );
-
   return (
-    <SafeAreaView style={[styles.safeArea, dynamicStyles.safeArea]}>
-      <ColumnFlex gap={10} style={styles.root}>
-        <View style={styles.logoWrapper}>
+    <SafeAreaView style={dynamicStyles.safeArea}>
+      <View style={staticStyles.wrapper}>
+        <View style={staticStyles.logoWrapper}>
           <TextLogo width={140} />
         </View>
 
-        <ColumnFlex gap={5} style={styles.routeContainer}>
-          <RouteButton name={"홈"} icon={<HomeIcon width={24} height={24} />} />
+        <View style={staticStyles.routeContainer}>
+          <RouteButton
+            name={"홈"}
+            icon={<MaterialIcons name={"home"} size={24} color={Colors.grey} />}
+            onPress={() => handleRouteButtonPress("홈")}
+            currentRoute={currentRoute}
+          />
           <RouteButton
             name={"암기빵"}
             icon={<GreyLogo width={24} height={24} />}
+            onPress={() => handleRouteButtonPress("암기빵")}
+            currentRoute={currentRoute}
           />
           <RouteButton
             name={"둘러보기"}
-            icon={<ExploreIcon width={24} height={24} />}
+            icon={
+              <MaterialIcons name={"search"} size={24} color={Colors.grey} />
+            }
+            onPress={() => handleRouteButtonPress("둘러보기")}
+            currentRoute={currentRoute}
           />
           <RouteButton
             name={"친구"}
-            icon={<PeopleIcon width={24} height={24} />}
+            icon={
+              <MaterialIcons name={"people"} size={24} color={Colors.grey} />
+            }
+            onPress={() => handleRouteButtonPress("친구")}
+            currentRoute={currentRoute}
           />
           <RouteButton
             name={"로그아웃"}
-            icon={<LogoutIcon width={24} height={24} />}
-            onPress={props.onLogout}
+            icon={
+              <MaterialIcons name={"logout"} size={24} color={Colors.grey} />
+            }
+            currentRoute={currentRoute}
+            onPress={onLogout}
           />
-        </ColumnFlex>
-      </ColumnFlex>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
+interface RouteButtonProps {
+  name: string;
+  icon: React.ReactElement;
+  currentRoute: string;
+  onPress?: () => void;
+}
+
+function RouteButton({ name, icon, currentRoute, onPress }: RouteButtonProps) {
+  return (
+    <Button
+      label={name}
+      style={staticStyles.route}
+      contentStyle={staticStyles.routeContent}
+      labelSize={18}
+      labelWeight={"medium"}
+      backgroundColor={
+        currentRoute === name ? Colors.greyLighter : Colors.white
+      }
+      icon={icon}
+      onPress={onPress}
+    />
+  );
+}
+
+interface DynamicStylesProps {
+  statusBarHeight: number;
+}
+
+const getDynamicStyles = (props: DynamicStylesProps) =>
+  StyleSheet.create({
+    safeArea: {
+      height: 50 + props.statusBarHeight,
+    },
+  });
+
+const staticStyles = StyleSheet.create({
+  wrapper: {
     height: "100%",
-  },
-  root: {
     backgroundColor: Colors.white,
+    gap: 10,
     flex: 1,
-    height: "100%",
   },
   logoWrapper: {
     padding: 20,
   },
   routeContainer: {
+    gap: 5,
     padding: 10,
   },
   route: {
     width: "100%",
-    padding: 0,
+    borderRadius: 5,
   },
   routeContent: {
     padding: 15,
-    borderRadius: 5,
+    width: "100%",
     justifyContent: "flex-start",
   },
 });

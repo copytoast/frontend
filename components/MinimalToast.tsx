@@ -1,22 +1,14 @@
 import React from "react";
 
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import Typography from "@/components/Typography";
-import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
+import ToastIcon from "@/components/ToastIcon";
 
 import Colors from "@/constants/Colors";
-
-import InfoIcon from "@/assets/vectors/info.svg";
-import ToastIcon from "./ToastIcon";
 
 interface MinimalToastProps {
   name: string;
@@ -38,43 +30,57 @@ function MinimalToast({
   style,
 }: MinimalToastProps) {
   return (
-    <RowFlex style={[styles.root, style]}>
-      <RowFlex style={styles.left} gap={10}>
+    <View style={[staticStyles.root, style]}>
+      <View style={staticStyles.left}>
         <ToastIcon
           size={40}
           picture={picture}
           like={{ count: addCount, added }}
         />
-        <RowFlex style={styles.left} gap={5}>
-          <Typography size={16} weight="medium" color={Colors.greyDark}>
+        <View style={staticStyles.name}>
+          <Typography size={16} weight={"medium"} color={Colors.greyDark}>
             {name}
           </Typography>
           <Button
             onPress={onDetail}
-            icon={<InfoIcon width={24} height={24} />}
+            icon={
+              <MaterialIcons
+                name={"info-outline"}
+                size={24}
+                color={Colors.grey}
+              />
+            }
           />
-        </RowFlex>
-      </RowFlex>
+        </View>
+      </View>
       <Button
         label={added ? "취소" : "담기"}
-        fontSize={16}
-        color={added ? Colors.greyLight : Colors.primary}
+        labelSize={16}
+        backgroundColor={added ? Colors.greyLight : Colors.primaryLight}
         onPress={onAdd}
-        contentStyle={styles.button}
+        style={staticStyles.button}
       />
-    </RowFlex>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   root: {
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   left: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 10,
+  },
+  name: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
   },
   button: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
 });
 

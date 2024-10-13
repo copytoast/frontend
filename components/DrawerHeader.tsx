@@ -1,54 +1,67 @@
 import React from "react";
 
-import { Platform, Pressable, StatusBar, StyleSheet } from "react-native";
+import { View, StatusBar, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { DrawerHeaderProps } from "@react-navigation/drawer";
 
-import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
 import Typography from "@/components/Typography";
+import FeedbackPressable from "@/components/FeedbackPressable";
 
 import Colors from "@/constants/Colors";
 
-import MenuIcon from "@/assets/vectors/menu.svg";
-import SearchIcon from "@/assets/vectors/search.svg";
+export default function DrawerHeader({ navigation }: DrawerHeaderProps) {
+  const dynamicStyles = getDynamicStyles({
+    statusBarHeight: StatusBar.currentHeight ?? 0,
+  });
 
-export default function DrawerHeader(props: DrawerHeaderProps) {
-  const dynamicStyles = {
-    safeArea: {
-      height:
-        60 + (Platform.OS === "android" ? StatusBar.currentHeight ?? 0 : 0),
-    },
-  };
+  // 검색창을 눌렀을 때의 동작
+  function handleSearchBoxPress() {
+    // TODO: 검색 화면으로 이동
+  }
 
   return (
     <SafeAreaView style={dynamicStyles.safeArea}>
-      <RowFlex gap={10} style={styles.root}>
+      <View style={styles.wrapper}>
         <Button
-          onPress={props.navigation.toggleDrawer}
-          icon={<MenuIcon width={30} height={30} />}
+          onPress={navigation.toggleDrawer}
+          icon={<MaterialIcons name={"menu"} size={30} color={Colors.grey} />}
         />
-
-        <Pressable style={styles.searchBoxWrapper} onPress={() => {}}>
-          <RowFlex gap={10} style={styles.searchBox}>
-            <SearchIcon width={24} height={24} />
+        <FeedbackPressable
+          style={styles.searchBoxWrapper}
+          onPress={handleSearchBoxPress}
+        >
+          <View style={styles.searchBox}>
+            <MaterialIcons name={"search"} size={24} color={Colors.greyLight} />
             <Typography size={18} color={Colors.greyLight}>
               암기빵, 사용자 검색
             </Typography>
-          </RowFlex>
-        </Pressable>
-      </RowFlex>
+          </View>
+        </FeedbackPressable>
+      </View>
     </SafeAreaView>
   );
 }
 
+interface DynamicStylesProps {
+  statusBarHeight: number;
+}
+
+const getDynamicStyles = (props: DynamicStylesProps) =>
+  StyleSheet.create({
+    safeArea: {
+      height: 60 + props.statusBarHeight,
+    },
+  });
+
 const styles = StyleSheet.create({
-  root: {
+  wrapper: {
+    flexDirection: "row",
     backgroundColor: Colors.greyLighter,
-    position: "absolute",
     alignItems: "center",
-    bottom: 0,
+    gap: 10,
     paddingHorizontal: 10,
     width: "100%",
     height: 60,
@@ -57,6 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchBox: {
+    flexDirection: "row",
+    gap: 10,
     backgroundColor: Colors.white,
     width: "100%",
     paddingVertical: 8,

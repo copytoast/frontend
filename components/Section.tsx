@@ -1,20 +1,12 @@
 import React from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import ColumnFlex from "@/components/ColumnFlex";
-import RowFlex from "@/components/RowFlex";
+import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 import Typography from "@/components/Typography";
 import FeedbackPressable from "@/components/FeedbackPressable";
 
 import Colors from "@/constants/Colors";
-
-import ArrowIcon from "@/assets/vectors/arrow.svg";
 
 interface SectionProps {
   style?: StyleProp<ViewStyle>;
@@ -36,45 +28,49 @@ export default function Section({
   children,
 }: SectionProps) {
   return (
-    <ColumnFlex style={[styles.root, style]}>
+    <View style={[staticStyles.root, style]}>
       <FeedbackPressable
+        style={[staticStyles.title, titleStyle]}
         onPress={onTitlePress}
-        style={styles.titleButton}
-        contentStyle={styles.titleButtonContent}
-        scaleComponent={"content"}
-        colorComponent={"content"}
       >
-        <RowFlex style={[styles.title, titleStyle]}>
-          <RowFlex gap={10}>
-            {titleIcon}
-            <Typography size={18} color={Colors.grey} weight={"medium"}>
-              {title}
-            </Typography>
-          </RowFlex>
-          <RowFlex>
-            {titleArrowVisible && <ArrowIcon width={12} height={12} />}
-          </RowFlex>
-        </RowFlex>
+        <View style={staticStyles.left}>
+          {titleIcon}
+          <Typography size={18} color={Colors.grey} weight={"medium"}>
+            {title}
+          </Typography>
+        </View>
+        <View>
+          {titleArrowVisible && (
+            <MaterialIcons
+              name={"keyboard-arrow-right"}
+              size={20}
+              color={Colors.grey}
+            />
+          )}
+        </View>
       </FeedbackPressable>
       {children}
-    </ColumnFlex>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   root: {
     backgroundColor: Colors.white,
     borderRadius: 10,
     overflow: "hidden",
   },
-  titleButton: {},
-  titleButtonContent: {
-    borderRadius: 10,
+  left: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   title: {
+    width: "100%",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 15,
+    padding: 20,
+    borderRadius: 10,
   },
 });

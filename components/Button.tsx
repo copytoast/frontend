@@ -1,114 +1,97 @@
 import React from "react";
 
 import {
-  StyleSheet,
   View,
+  StyleSheet,
   ActivityIndicator,
-  type PressableProps,
-  type DimensionValue,
-  type ViewStyle,
   type StyleProp,
+  type ViewStyle,
 } from "react-native";
 
 import Typography, { type Weight } from "@/components/Typography";
-import FeedbackPressable from "@/components/FeedbackPressable";
+import FeedbackPressable, {
+  type FeedbackPressableProps,
+} from "@/components/FeedbackPressable";
 
 import Colors from "@/constants/Colors";
 
 import isDarkColor from "@/utility/isDarkColor";
+import adjustSaturation from "@/utility/adjustSaturation";
 
 type IconPosition = "left" | "right";
 
-interface ButtonProps extends Omit<PressableProps, "children"> {
-  label?: string;
-  fontWeight?: Weight;
-  fontSize?: number;
-  color?: string;
-  icon?: React.ReactNode;
-  iconSize?: DimensionValue;
+interface ButtonProps extends Omit<FeedbackPressableProps, "children"> {
+  backgroundColor?: string;
+  icon?: React.ReactElement;
   iconPosition?: IconPosition;
+  label?: string;
+  labelWeight?: Weight;
+  labelSize?: number;
   loading?: boolean;
-  contentStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
 }
 
 function Button({
-  label,
-  fontWeight = "regular",
-  color = "#00000000",
-  fontSize,
+  backgroundColor = "#00000000",
   icon,
-  iconSize,
   iconPosition = "left",
+  label,
+  labelWeight = "medium",
+  labelSize,
   loading = false,
+  style,
   contentStyle,
   ...props
 }: ButtonProps) {
-  const backgroundColor = props.disabled ? Colors.greyLight : color;
-  const isBackgroundColorDark = isDarkColor(backgroundColor);
+  // 버튼이 비활성화인 경우 배경색의 채도를 낮춤
+  const adjustedBackgroundColor = props.disabled
+    ? adjustSaturation(backgroundColor, -1)
+    : backgroundColor;
+
+  // 배경색의 밝기에 따라 글자색 결정
+  const isBackgroundColorDark = isDarkColor(adjustedBackgroundColor);
   const foreColor = isBackgroundColorDark ? Colors.white : Colors.greyDark;
-  const iconOnly = label === undefined;
-
-  const dynamicStyles = {
-    icon: {
-      width: iconSize,
-      height: iconSize,
-    },
-    root: {
-      padding: iconOnly ? 5 : undefined,
-      borderRadius: iconOnly ? 1000 : 10,
-    },
-  };
-
-  const Icon = React.useCallback(
-    () => <View style={dynamicStyles.icon}>{icon}</View>,
-    [icon]
-  );
-
-  const Content = React.useCallback(
-    () => (
-      <>
-        {icon && iconPosition === "left" && <Icon />}
-        {label !== undefined && (
-          <Typography size={fontSize} color={foreColor} weight={fontWeight}>
-            {label}
-          </Typography>
-        )}
-        {icon && iconPosition === "right" && <Icon />}
-      </>
-    ),
-    [icon, iconPosition, label, fontSize, fontWeight, isBackgroundColorDark]
-  );
 
   return (
     <FeedbackPressable
       {...props}
       disabled={props.disabled || loading}
-      color={backgroundColor}
-      style={[styles.root, dynamicStyles.root, props.style]}
-      contentStyle={[styles.content, contentStyle]}
+      backgroundColor={adjustedBackgroundColor}
+      style={[staticStyles.wrapper, style]}
     >
-      {loading ? (
-        <View style={dynamicStyles.icon}>
+      <View style={[staticStyles.content, contentStyle]}>
+        {loading ? (
           <ActivityIndicator color={foreColor} />
-        </View>
-      ) : (
-        <Content />
-      )}
+        ) : (
+          <>
+            {iconPosition === "left" && icon}
+            {label !== undefined && (
+              <Typography
+                size={labelSize}
+                color={foreColor}
+                weight={labelWeight}
+              >
+                {label}
+              </Typography>
+            )}
+            {iconPosition === "right" && icon}
+          </>
+        )}
+      </View>
     </FeedbackPressable>
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    justifyContent: "center",
-    padding: 10,
+const staticStyles = StyleSheet.create({
+  wrapper: {
     borderRadius: 10,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    padding: 10,
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
     gap: 10,
   },
 });
