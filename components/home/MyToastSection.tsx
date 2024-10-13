@@ -76,7 +76,9 @@ export default function MyToastSection({
       <View style={staticStyles.quickButtonContainer}>
         <Button
           label={`새 암기빵\n만들기`}
-          icon={<MaterialIcons name={"add"} size={20} color={Colors.grey} />}
+          icon={
+            <MaterialIcons name={"add-circle"} size={20} color={Colors.grey} />
+          }
           iconPosition={"right"}
           backgroundColor={Colors.greyLighter}
           style={staticStyles.quickButton}

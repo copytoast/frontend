@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, StatusBar, StyleSheet } from "react-native";
+import { View, StatusBar, StyleSheet, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -8,7 +8,6 @@ import type { DrawerHeaderProps } from "@react-navigation/drawer";
 
 import Button from "@/components/Button";
 import Typography from "@/components/Typography";
-import FeedbackPressable from "@/components/FeedbackPressable";
 
 import Colors from "@/constants/Colors";
 
@@ -29,7 +28,7 @@ export default function DrawerHeader({ navigation }: DrawerHeaderProps) {
           onPress={navigation.toggleDrawer}
           icon={<MaterialIcons name={"menu"} size={30} color={Colors.grey} />}
         />
-        <FeedbackPressable
+        <Pressable
           style={styles.searchBoxWrapper}
           onPress={handleSearchBoxPress}
         >
@@ -39,7 +38,7 @@ export default function DrawerHeader({ navigation }: DrawerHeaderProps) {
               암기빵, 사용자 검색
             </Typography>
           </View>
-        </FeedbackPressable>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

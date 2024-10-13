@@ -19,6 +19,7 @@ interface ToastProps {
   checkBoxVisible?: boolean;
   checked?: boolean;
   onCheckChange?: (checked: boolean) => void;
+  onDetail?: () => void;
   my?: boolean;
   picture?: string;
   detailButtonVisible?: boolean;
@@ -33,6 +34,7 @@ function Toast({
   checkBoxVisible,
   checked,
   onCheckChange,
+  onDetail,
   my,
   picture,
   detailButtonVisible,
@@ -80,6 +82,7 @@ function Toast({
           icon={
             <MaterialIcons name={"more-vert"} size={24} color={Colors.grey} />
           }
+          onPress={onDetail}
         />
       )}
     </View>

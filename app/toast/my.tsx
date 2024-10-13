@@ -5,6 +5,8 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  type LayoutChangeEvent,
+  type LayoutRectangle,
 } from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -28,10 +30,11 @@ export default function My() {
 
   const [toasts, setToasts] = React.useState<GetAddedToastsResult["toasts"]>();
   const [checkedToasts, setCheckedToasts] = React.useState<number[]>([]);
+  const [moreButtonLayout, setMoreButtonLayout] =
+    React.useState<LayoutRectangle>();
   const [refreshing, setRefreshing] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
-
-  const moreButtonRef = React.useRef<View>(null);
+  const [filterOpen, setFilterOpen] = React.useState(false);
 
   // 담은 암기빵 불러오기
   async function loadAddedToasts() {
@@ -79,6 +82,18 @@ export default function My() {
     }
   }
 
+  // 암기빵 더보기 버튼 레이아웃 변경 핸들러
+  function handleMoreButtonLayout(event: LayoutChangeEvent) {
+    event.currentTarget?.measureInWindow((x, y, width, height) => {
+      setMoreButtonLayout({
+        x,
+        y,
+        width,
+        height,
+      });
+    });
+  }
+
   // 암기빵 더보기 메뉴 열기 핸들러
   function handleMenuOpen() {
     setMenuOpen(true);
@@ -87,6 +102,16 @@ export default function My() {
   // 암기빵 더보기 메뉴 닫기 핸들러
   function handleMenuClose() {
     setMenuOpen(false);
+  }
+
+  // 암기빵 필터 열기 핸들러
+  function handleFilterOpen() {
+    setFilterOpen(true);
+  }
+
+  // 암기빵 필터 닫기 핸들러
+  function handleFilterClose() {
+    setFilterOpen(false);
   }
 
   return (
@@ -125,19 +150,21 @@ export default function My() {
                   color={Colors.grey}
                 />
               }
+              onPress={handleFilterOpen}
             />
-            <View ref={moreButtonRef} collapsable={false}>
+            {checkedToasts.length > 0 && (
               <Button
                 icon={
                   <MaterialIcons
                     name={"more-vert"}
                     size={24}
                     color={Colors.grey}
-                    onPress={handleMenuOpen}
                   />
                 }
+                onPress={handleMenuOpen}
+                onLayout={handleMoreButtonLayout}
               />
-            </View>
+            )}
           </View>
         </View>
         {toasts && (
@@ -156,6 +183,7 @@ export default function My() {
                 my={toast.creator === sessionContext.state.user?.username}
                 checked={checkedToasts.includes(toast.id)}
                 onCheckChange={(checked) => handleToastCheck(toast.id, checked)}
+                onDetail={() => {}}
                 checkBoxVisible
                 detailButtonVisible
               />
@@ -165,26 +193,21 @@ export default function My() {
       </View>
 
       {/* 더보기 메뉴 */}
-      {moreButtonRef.current && (
-        <Menu
-          open={menuOpen}
-          onClose={handleMenuClose}
-          anchorElement={moreButtonRef.current}
-        >
-          <Button
-            icon={
-              <MaterialIcons name={"delete"} size={20} color={Colors.grey} />
-            }
-            label={"담기 취소"}
-            onPress={() => {
-              handleMenuClose();
-            }}
-            disabled={checkedToasts.length === 0}
-            backgroundColor={Colors.white}
-            contentStyle={staticStyles.menuItem}
-          />
-        </Menu>
-      )}
+      <Menu
+        open={menuOpen}
+        onClose={handleMenuClose}
+        buttonLayout={moreButtonLayout}
+      >
+        <Button
+          icon={<MaterialIcons name={"delete"} size={20} color={Colors.grey} />}
+          label={"담기 취소"}
+          onPress={() => {
+            handleMenuClose();
+          }}
+          backgroundColor={Colors.white}
+          contentStyle={staticStyles.menuItem}
+        />
+      </Menu>
     </ScrollView>
   );
 }
