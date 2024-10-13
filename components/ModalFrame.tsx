@@ -62,7 +62,9 @@ export default function ModalFrame({
 
   return (
     <Modal visible={enabled} transparent>
-      <Animated.View style={[dynamicStyles.background, staticStyles.background]}>
+      <Animated.View
+        style={[dynamicStyles.background, staticStyles.background]}
+      >
         <Animated.View style={[dynamicStyles.modal, staticStyles.modal, style]}>
           <Animated.View style={[dynamicStyles.content, staticStyles.content]}>
             {children}

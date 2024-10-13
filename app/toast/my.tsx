@@ -13,15 +13,15 @@ import Pop from "@/components/Pop";
 
 import Colors from "@/constants/Colors";
 import CheckBox from "@/components/CheckBox";
-import Typography from "@/components/Typography";
 import Button from "@/components/Button";
+import Toast from "@/components/Toast";
+import Menu from "@/components/Menu";
 
 import { SessionContext } from "@/contexts/Session";
 
 import getAddedToasts, {
   type GetAddedToastsResult,
 } from "@/api/getAddedToasts";
-import Toast from "@/components/Toast";
 
 export default function My() {
   const sessionContext = React.useContext(SessionContext);
@@ -29,6 +29,9 @@ export default function My() {
   const [toasts, setToasts] = React.useState<GetAddedToastsResult["toasts"]>();
   const [checkedToasts, setCheckedToasts] = React.useState<number[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  const moreButtonRef = React.useRef<View>(null);
 
   // 담은 암기빵 불러오기
   async function loadAddedToasts() {
@@ -50,6 +53,7 @@ export default function My() {
     handleRefresh();
   }, []);
 
+  // 새로고침 핸들러
   async function handleRefresh() {
     setRefreshing(true);
     setCheckedToasts([]);
@@ -75,6 +79,16 @@ export default function My() {
     }
   }
 
+  // 암기빵 더보기 메뉴 열기 핸들러
+  function handleMenuOpen() {
+    setMenuOpen(true);
+  }
+
+  // 암기빵 더보기 메뉴 닫기 핸들러
+  function handleMenuClose() {
+    setMenuOpen(false);
+  }
+
   return (
     <ScrollView
       refreshControl={
@@ -82,8 +96,8 @@ export default function My() {
       }
     >
       <StatusBar barStyle={"dark-content"} />
-      <View style={styles.root}>
-        <View style={styles.header}>
+      <View style={staticStyles.root}>
+        <View style={staticStyles.header}>
           <CheckBox
             checked={checkedToasts.length > 0}
             indeterminate={
@@ -102,24 +116,38 @@ export default function My() {
               }`
             }
           />
-          <Button
-            icon={
-              <MaterialIcons
-                name={"filter-alt"}
-                size={24}
-                color={Colors.grey}
+          <View style={staticStyles.buttonsWrapper}>
+            <Button
+              icon={
+                <MaterialIcons
+                  name={"filter-alt"}
+                  size={24}
+                  color={Colors.grey}
+                />
+              }
+            />
+            <View ref={moreButtonRef} collapsable={false}>
+              <Button
+                icon={
+                  <MaterialIcons
+                    name={"more-vert"}
+                    size={24}
+                    color={Colors.grey}
+                    onPress={handleMenuOpen}
+                  />
+                }
               />
-            }
-          />
+            </View>
+          </View>
         </View>
         {toasts && (
           <Pop
-            style={styles.content}
+            style={staticStyles.content}
             visible={toasts !== undefined && !refreshing}
           >
             {toasts.map((toast) => (
               <Toast
-                style={styles.toast}
+                style={staticStyles.toast}
                 key={toast.id}
                 name={toast.name}
                 description={toast.description}
@@ -135,13 +163,39 @@ export default function My() {
           </Pop>
         )}
       </View>
+
+      {/* 더보기 메뉴 */}
+      {moreButtonRef.current && (
+        <Menu
+          open={menuOpen}
+          onClose={handleMenuClose}
+          anchorElement={moreButtonRef.current}
+        >
+          <Button
+            icon={
+              <MaterialIcons name={"delete"} size={20} color={Colors.grey} />
+            }
+            label={"담기 취소"}
+            onPress={() => {
+              handleMenuClose();
+            }}
+            disabled={checkedToasts.length === 0}
+            backgroundColor={Colors.white}
+            contentStyle={staticStyles.menuItem}
+          />
+        </Menu>
+      )}
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   root: {
     padding: 10,
+  },
+  buttonsWrapper: {
+    flexDirection: "row",
+    gap: 5,
   },
   header: {
     flexDirection: "row",
@@ -156,5 +210,9 @@ const styles = StyleSheet.create({
   toast: {
     paddingVertical: 15,
     paddingHorizontal: 10,
+  },
+  menuItem: {
+    justifyContent: "flex-start",
+    width: "100%",
   },
 });

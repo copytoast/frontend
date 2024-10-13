@@ -5,9 +5,10 @@ import {
   Easing,
   type StyleProp,
   type ViewStyle,
+  type ViewProps,
 } from "react-native";
 
-interface PopProps {
+interface PopProps extends ViewProps {
   visible: boolean;
   children: React.ReactElement | React.ReactElement[];
   style?: StyleProp<ViewStyle>;
@@ -17,7 +18,7 @@ interface ReactElementWithKey extends React.ReactElement {
   key: string;
 }
 
-export default function Pop({ visible, children, style }: PopProps) {
+export default function Pop({ visible, children, style, ...props }: PopProps) {
   // key 값이 있는 자식 컴포넌트만 추출
   const validElements = (
     React.Children.toArray(children) as React.ReactElement[]
@@ -74,7 +75,7 @@ export default function Pop({ visible, children, style }: PopProps) {
   }
 
   return (
-    <View style={style}>
+    <View {...props} style={style}>
       {validElements.map((element) => (
         <Animated.View key={element.key} style={getStyle(element.key)}>
           {element}

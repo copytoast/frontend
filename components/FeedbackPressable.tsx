@@ -4,7 +4,6 @@ import {
   Animated,
   Easing,
   Pressable,
-  type PressableProps,
   type LayoutChangeEvent,
   type GestureResponderEvent,
   type StyleProp,
@@ -14,12 +13,13 @@ import {
 
 import isDarkColor from "@/utility/isDarkColor";
 
-export interface FeedbackPressableProps extends PressableProps {
+export interface FeedbackPressableProps
+  extends React.ComponentProps<typeof AnimatedPressable> {
   backgroundColor?: string;
   style?: StyleProp<ViewStyle>;
 }
 
-function FeedbackPressable({
+export default function FeedbackPressable({
   backgroundColor = "#00000000",
   children,
   disabled,
@@ -120,5 +120,3 @@ const getDynamicStyles = (props: DynamicStylesProps) => {
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-export default FeedbackPressable;

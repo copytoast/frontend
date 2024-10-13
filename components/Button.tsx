@@ -17,6 +17,7 @@ import Colors from "@/constants/Colors";
 
 import isDarkColor from "@/utility/isDarkColor";
 import adjustSaturation from "@/utility/adjustSaturation";
+import shadeColor from "@/utility/shadeColor";
 
 type IconPosition = "left" | "right";
 
@@ -49,9 +50,13 @@ function Button({
     ? adjustSaturation(backgroundColor, -1)
     : backgroundColor;
 
-  // 배경색의 밝기에 따라 글자색 결정
+  // 배경색의 밝기 및 비활성화 여부에 따라 글자색 결정
   const isBackgroundColorDark = isDarkColor(adjustedBackgroundColor);
-  const foreColor = isBackgroundColorDark ? Colors.white : Colors.greyDark;
+  const foreColor = isBackgroundColorDark
+    ? Colors.white
+    : props.disabled
+    ? shadeColor(Colors.grey, 70)
+    : Colors.grey;
 
   return (
     <FeedbackPressable
