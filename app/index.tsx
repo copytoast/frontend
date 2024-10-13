@@ -49,8 +49,8 @@ export default function Index() {
       initialRouteName="홈"
       screenOptions={{
         header: DrawerHeader,
-        headerStyle: styles.header,
-        sceneContainerStyle: styles.content,
+        headerStyle: staticStyles.header,
+        sceneContainerStyle: staticStyles.content,
       }}
       drawerContent={(props) => (
         <DrawerContent onLogout={handleLogout} {...props} />
@@ -62,7 +62,7 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   root: {
     flexDirection: "column",
     alignItems: "center",

@@ -3,19 +3,16 @@ import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import Colors from "@/constants/Colors";
 
-import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
 import TextField from "@/components/TextField";
 import BottomButton from "@/components/BottomButton";
 import Button from "@/components/Button";
-import RowFlex from "@/components/RowFlex";
 
 import { OnboardingContext } from "@/contexts/Onboarding";
-
-import EmailIcon from "@/assets/vectors/email.svg";
-import ArrowForward from "@/assets/vectors/arrow_forward.svg";
 
 import userExists from "@/api/userExists";
 
@@ -25,14 +22,11 @@ export default function Username() {
   const [bottomButtonHeight, setBottomButtonHeight] = React.useState(0);
   const [error, setError] = React.useState<string>();
   const [loading, setLoading] = React.useState(false);
+  const [focus, setFocus] = React.useState(true);
 
-  const dynamicStyles = {
-    root: {
-      flex: 1,
-      paddingBottom: bottomButtonHeight,
-    },
-  };
+  const dynamicStyles = getDynamicStyles({ bottomButtonHeight });
 
+  // 다음 버튼 활성화 여부
   const nextButtonEnabled =
     onboarding.state.id.length > 0 && error === undefined && !loading;
 
@@ -70,10 +64,10 @@ export default function Username() {
   }
 
   return (
-    <ColumnFlex style={dynamicStyles.root}>
+    <View style={[staticStyles.root, dynamicStyles.root]}>
       <StatusBar barStyle={"dark-content"} />
       {/* 상단 */}
-      <ColumnFlex gap={10} style={styles.top}>
+      <View style={staticStyles.top}>
         <Typography size={30} weight={"bold"}>
           아이디를 정해주세요.
         </Typography>
@@ -81,22 +75,29 @@ export default function Username() {
           로그인하거나 친구가 나를 찾을 때 사용하게 될 나만의 고유한 아이디를
           정해주세요.
         </Typography>
-      </ColumnFlex>
+      </View>
 
       {/* 콘텐츠 */}
-      <View style={styles.content}>
-        <RowFlex alignItems={"center"} gap={5} width={"100%"}>
-          <EmailIcon width={24} height={24} />
+      <View style={staticStyles.content}>
+        <View style={staticStyles.textFieldWrapper}>
+          <MaterialIcons
+            name={"alternate-email"}
+            size={24}
+            color={focus ? Colors.primary : Colors.grey}
+          />
           <TextField
             placeholder={"아이디"}
             variant={"standard"}
-            style={styles.textField}
+            style={staticStyles.textField}
             value={onboarding.state.id}
             onChangeText={handleChangeText}
             onSubmitEditing={handleNext}
             editable={!loading}
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
+            autoFocus
           />
-        </RowFlex>
+        </View>
         {error && (
           <Typography color={Colors.red} weight={"medium"}>
             {error}
@@ -106,7 +107,7 @@ export default function Username() {
 
       {/* 하단 */}
       <View
-        style={styles.bottom}
+        style={staticStyles.bottom}
         onLayout={(event) =>
           setBottomButtonHeight(event.nativeEvent.layout.height)
         }
@@ -119,27 +120,42 @@ export default function Username() {
         >
           <Button
             label={"다음"}
-            color={Colors.primary}
-            icon={<ArrowForward />}
-            iconSize={24}
-            style={styles.bottomButton}
+            backgroundColor={Colors.primary}
+            icon={
+              <MaterialIcons
+                name={"arrow-forward"}
+                size={24}
+                color={Colors.white}
+              />
+            }
+            style={staticStyles.bottomButton}
             onPress={handleNext}
             disabled={!nextButtonEnabled}
             loading={loading}
           />
         </BottomButton>
       </View>
-    </ColumnFlex>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   top: {
+    gap: 10,
     height: 200,
     padding: 20,
   },
   content: {
     padding: 20,
+  },
+  textFieldWrapper: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
+    width: "100%",
   },
   textField: {
     flex: 1,
@@ -155,5 +171,15 @@ const styles = StyleSheet.create({
   bottomButton: {
     width: "100%",
     height: 50,
+  },
+});
+
+interface DynamicStylesProps {
+  bottomButtonHeight: number;
+}
+
+const getDynamicStyles = ({ bottomButtonHeight }: DynamicStylesProps) => ({
+  root: {
+    paddingBottom: bottomButtonHeight,
   },
 });

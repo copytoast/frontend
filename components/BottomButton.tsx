@@ -1,51 +1,62 @@
 import React from "react";
 
-import { Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
-import ColumnFlex, { type ColumnFlexProps } from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
-import RowFlex from "@/components/RowFlex";
 
 import Colors from "@/constants/Colors";
 
-interface Button {
-  label: string;
-  onPress: () => void;
-  disabled?: boolean;
-}
-
-interface BottomButtonProps extends ColumnFlexProps {
-  anchor?: Button;
+interface BottomButtonProps {
+  anchor?: {
+    label: string;
+    onPress: () => void;
+    disabled?: boolean;
+  };
+  wrapperStyle?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
 
 export default function BottomButton({
   anchor,
   children,
+  wrapperStyle,
   ...props
 }: BottomButtonProps) {
   return (
-    <ColumnFlex {...props} gap={20} width={"100%"} alignItems={"center"}>
+    <View {...props} style={[staticStyles.root, wrapperStyle]}>
       {anchor && (
         <Pressable onPress={anchor.onPress} disabled={anchor.disabled}>
           <Typography
             size={"medium"}
             color={Colors.greyDark}
-            style={styles.anchorLabel}
+            style={staticStyles.anchorLabel}
           >
             {anchor.label}
           </Typography>
         </Pressable>
       )}
 
-      <RowFlex gap={10} width={"100%"}>
-        {children}
-      </RowFlex>
-    </ColumnFlex>
+      <View style={staticStyles.content}>{children}</View>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
+  root: {
+    gap: 20,
+    width: "100%",
+    alignItems: "center",
+  },
+  content: {
+    gap: 10,
+    width: "100%",
+  },
   anchorLabel: {
     textDecorationLine: "underline",
   },

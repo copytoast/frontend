@@ -2,39 +2,23 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { DrawerNavigationProp } from "@react-navigation/drawer";
 
 import Section from "@/components/Section";
 import Toast from "@/components/Toast";
-import RowFlex from "@/components/RowFlex";
 import Button from "@/components/Button";
 import Pop from "@/components/Pop";
-import Skeleton from "@/components/Skeleton";
 
 import Colors from "@/constants/Colors";
 
 import GreyLogo from "@/assets/vectors/logo_grey.svg";
-import AddIcon from "@/assets/vectors/add.svg";
-import ListIcon from "@/assets/vectors/list.svg";
 
 import { SessionContext } from "@/contexts/Session";
 
 import { type GetAddedToastsResult } from "@/api/getAddedToasts";
 
 import type { ParamList } from "@/app";
-
-const ToastSkeleton = () => (
-  <Skeleton containerStyle={styles.skeleton} isLoading>
-    <Toast
-      name={""}
-      description={""}
-      addCount={0}
-      added={false}
-      my={false}
-      detailButtonVisible
-    />
-  </Skeleton>
-);
 
 interface MyToastSectionProps {
   toasts?: GetAddedToastsResult["toasts"];
@@ -55,9 +39,13 @@ export default function MyToastSection({
     navigation.navigate("암기빵");
   }
 
-  function handleCreateToast() {}
+  function handleCreateToast() {
+    // TODO: 암기빵 만들기 화면으로 이동
+  }
 
-  function handleExploreToast() {}
+  function handleExploreToast() {
+    // TODO: 다른 암기빵 둘러보기 화면으로 이동
+  }
 
   return (
     <Section
@@ -68,7 +56,7 @@ export default function MyToastSection({
     >
       {toasts && (
         <Pop
-          style={styles.content}
+          style={staticStyles.content}
           visible={toasts !== undefined && !refreshing}
         >
           {toasts.map((toast) => (
@@ -85,35 +73,37 @@ export default function MyToastSection({
         </Pop>
       )}
 
-      <RowFlex gap={10} style={styles.quickButtonContainer}>
+      <View style={staticStyles.quickButtonContainer}>
         <Button
           label={`새 암기빵\n만들기`}
-          icon={<AddIcon width={20} height={20} />}
+          icon={<MaterialIcons name={"add"} size={20} color={Colors.grey} />}
           iconPosition={"right"}
-          color={Colors.greyLighter}
-          style={styles.quickButton}
-          contentStyle={styles.quickButtonContent}
-          fontSize={16}
-          fontWeight={"medium"}
+          backgroundColor={Colors.greyLighter}
+          style={staticStyles.quickButton}
+          contentStyle={staticStyles.quickButtonContent}
+          labelSize={16}
+          labelWeight={"medium"}
           onPress={handleCreateToast}
         />
         <Button
           label={`다른 암기빵\n둘러보기`}
-          icon={<ListIcon width={20} height={20} />}
+          icon={
+            <MaterialIcons name={"explore"} size={20} color={Colors.grey} />
+          }
           iconPosition={"right"}
-          color={Colors.greyLighter}
-          style={styles.quickButton}
-          contentStyle={styles.quickButtonContent}
-          fontSize={16}
-          fontWeight={"medium"}
+          backgroundColor={Colors.greyLighter}
+          style={staticStyles.quickButton}
+          contentStyle={staticStyles.quickButtonContent}
+          labelSize={16}
+          labelWeight={"medium"}
           onPress={handleExploreToast}
         />
-      </RowFlex>
+      </View>
     </Section>
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   content: {
     padding: 5,
     paddingTop: 0,
@@ -128,15 +118,18 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   quickButtonContainer: {
+    gap: 10,
     padding: 10,
+    flexDirection: "row",
   },
   quickButton: {
     flex: 1,
+    borderRadius: 10,
   },
   quickButtonContent: {
     justifyContent: "space-between",
     alignItems: "flex-start",
-    borderRadius: 10,
+    width: "100%",
     padding: 15,
   },
 });

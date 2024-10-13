@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import ArrowForward from "@/assets/vectors/arrow_forward.svg";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import ModalFrame from "@/components/ModalFrame";
 import Typography from "@/components/Typography";
@@ -23,25 +23,30 @@ export default function ExitModal({
     <>
       <Button
         label={"가입 취소"}
-        color={Colors.grey}
+        backgroundColor={Colors.grey}
         onPress={onCancel}
-        style={styles.button}
+        style={staticStyles.button}
       />
 
       <Button
         label={"계속 가입"}
-        color={Colors.primary}
-        icon={<ArrowForward />}
-        iconSize={24}
+        backgroundColor={Colors.primary}
+        icon={
+          <MaterialIcons
+            name={"arrow-forward"}
+            size={24}
+            color={Colors.white}
+          />
+        }
         onPress={onConfirm}
-        style={styles.button}
+        style={staticStyles.button}
       />
     </>
   );
 
   return (
     <ModalFrame visible={visible} buttons={buttons}>
-      <View style={styles.content}>
+      <View style={staticStyles.content}>
         <Typography size={20} weight={"bold"}>
           가입을 취소할까요? 😥
         </Typography>
@@ -53,7 +58,7 @@ export default function ExitModal({
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   content: {
     gap: 15,
   },

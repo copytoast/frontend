@@ -1,24 +1,15 @@
 import React from "react";
 
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import Typography from "@/components/Typography";
-import RowFlex from "@/components/RowFlex";
 import ToastIcon from "@/components/ToastIcon";
-import ColumnFlex from "@/components/ColumnFlex";
 import CheckBox from "@/components/CheckBox";
 import Button from "@/components/Button";
 
 import Colors from "@/constants/Colors";
-
-import MoreIcon from "@/assets/vectors/more.svg";
 
 interface ToastProps {
   name: string;
@@ -48,8 +39,8 @@ function Toast({
   style,
 }: ToastProps) {
   return (
-    <RowFlex style={[styles.root, style]} gap={10}>
-      <RowFlex style={styles.left} gap={10}>
+    <View style={[styles.root, style]}>
+      <View style={styles.left}>
         {checkBoxVisible && (
           <CheckBox
             checked={checked ?? false}
@@ -61,8 +52,8 @@ function Toast({
           picture={picture}
           like={{ count: addCount, added }}
         />
-        <ColumnFlex style={styles.info}>
-          <RowFlex style={styles.title} gap={5}>
+        <View style={styles.info}>
+          <View style={styles.title}>
             <Typography size={16} weight="bold" color={Colors.greyDark}>
               {name}
             </Typography>
@@ -73,7 +64,7 @@ function Toast({
                 </Typography>
               </View>
             )}
-          </RowFlex>
+          </View>
           <Typography
             size={14}
             weight="regular"
@@ -82,27 +73,37 @@ function Toast({
           >
             {description}
           </Typography>
-        </ColumnFlex>
-      </RowFlex>
+        </View>
+      </View>
       {detailButtonVisible && (
-        <Button icon={<MoreIcon width={24} height={24} />} />
+        <Button
+          icon={
+            <MaterialIcons name={"more-vert"} size={24} color={Colors.grey} />
+          }
+        />
       )}
-    </RowFlex>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
+    flexDirection: "row",
+    gap: 10,
     justifyContent: "space-between",
     padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.white,
   },
   left: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 10,
     flex: 1,
   },
   title: {
+    gap: 5,
+    flexDirection: "row",
     alignItems: "center",
   },
   info: {

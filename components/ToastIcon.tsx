@@ -2,7 +2,7 @@ import React from "react";
 
 import { StyleSheet, View, Image } from "react-native";
 
-import LikeBadge from "@/components/LikeBadge";
+import FavoriteBadge from "@/components/FavoriteBadge";
 
 import Colors from "@/constants/Colors";
 
@@ -18,8 +18,6 @@ interface ToastIconProps {
 }
 
 export default function ToastIcon({ picture, size, like }: ToastIconProps) {
-  const ratio = 0.6;
-
   const dynamicStyles = {
     root: {
       width: size,
@@ -49,15 +47,17 @@ export default function ToastIcon({ picture, size, like }: ToastIconProps) {
       )}
 
       {like && (
-        <LikeBadge
-          liked={like.added}
-          like={like.count}
+        <FavoriteBadge
+          favorite={like.added}
+          favoriteCount={like.count}
           style={styles.likeBadge}
         />
       )}
     </View>
   );
 }
+
+const ratio = 0.6;
 
 const styles = StyleSheet.create({
   icon: {

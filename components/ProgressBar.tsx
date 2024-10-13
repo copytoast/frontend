@@ -1,12 +1,10 @@
 import React from "react";
 
-import { StyleSheet, Animated, Easing } from "react-native";
+import { View, StyleSheet, Animated, Easing } from "react-native";
 
 import Logo from "@/assets/vectors/logo.svg";
 import GreyLogo from "@/assets/vectors/logo_grey.svg";
 
-import RowFlex from "@/components/RowFlex";
-import ColumnFlex from "@/components/ColumnFlex";
 import Typography from "@/components/Typography";
 import Colors from "@/constants/Colors";
 
@@ -17,11 +15,13 @@ interface ProgressBarProps {
 
 export default function ProgressBar({ steps, currentStep }: ProgressBarProps) {
   const [prevStep, setPrevStep] = React.useState(currentStep);
-  const [widthAnimationCompleted, setWidthAnimationCompleted] =
-    React.useState(true);
+  const [animationFinished, setAnimationFinished] = React.useState(true);
 
   const widthAnimated = React.useRef(new Animated.Value(0)).current;
 
+  const dynamicStyles = getDynamicStyles({ widthAnimated });
+
+  // steps 개수 또는 currentStep이 바뀔 때 애니메이션 실행
   React.useEffect(() => {
     Animated.timing(widthAnimated, {
       toValue: Math.min(
@@ -33,52 +33,37 @@ export default function ProgressBar({ steps, currentStep }: ProgressBarProps) {
       useNativeDriver: false,
     }).start(({ finished }) => {
       if (finished) {
-        setWidthAnimationCompleted(true);
+        setAnimationFinished(true);
         setPrevStep(currentStep);
       }
     });
 
     return () => {
-      setWidthAnimationCompleted(false);
+      setAnimationFinished(false);
     };
   }, [steps.length, currentStep]);
 
+  // 현재 스텝 이전의 스텝들은 주황색으로 표시
   function shouldBeOrange(index: number) {
     return (
       index < currentStep ||
-      (index === currentStep &&
-        (widthAnimationCompleted || prevStep > currentStep))
+      (index === currentStep && (animationFinished || prevStep > currentStep))
     );
   }
 
-  const styles = StyleSheet.create({
-    line: {
-      position: "absolute",
-      width: "100%",
-      top: 16,
-      borderRadius: 4,
-      height: 8,
-      backgroundColor: Colors.greyLight,
-    },
-    backgroundLine: {
-      backgroundColor: Colors.greyLight,
-    },
-    foregroundLine: {
-      backgroundColor: Colors.primary,
-      width: widthAnimated.interpolate({
-        inputRange: [0, 1],
-        outputRange: ["0%", "100%"],
-      }),
-    },
-  });
-
   return (
-    <RowFlex width="100%">
-      <Animated.View style={{ ...styles.line, ...styles.backgroundLine }} />
-      <Animated.View style={{ ...styles.line, ...styles.foregroundLine }} />
+    <View style={staticStyles.root}>
+      <Animated.View style={[staticStyles.line, staticStyles.backgroundLine]} />
+      <Animated.View
+        style={[
+          staticStyles.line,
+          staticStyles.foregroundLine,
+          dynamicStyles.foregroundLine,
+        ]}
+      />
 
       {steps.map((step, index) => (
-        <ColumnFlex key={step} gap={6} flex={1} alignItems="center">
+        <View style={staticStyles.step} key={step}>
           {/* 아이콘 */}
           {shouldBeOrange(index) ? (
             <Logo width={32} height={32} />
@@ -102,8 +87,48 @@ export default function ProgressBar({ steps, currentStep }: ProgressBarProps) {
               {step}
             </Typography>
           )}
-        </ColumnFlex>
+        </View>
       ))}
-    </RowFlex>
+    </View>
   );
 }
+
+const staticStyles = StyleSheet.create({
+  root: {
+    width: "100%",
+    flexDirection: "row",
+  },
+  step: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 6,
+    flex: 1,
+  },
+  line: {
+    position: "absolute",
+    width: "100%",
+    top: 16,
+    borderRadius: 4,
+    height: 8,
+    backgroundColor: Colors.greyLight,
+  },
+  backgroundLine: {
+    backgroundColor: Colors.greyLight,
+  },
+  foregroundLine: {
+    backgroundColor: Colors.primary,
+  },
+});
+
+interface DynamicStylesProps {
+  widthAnimated: Animated.Value;
+}
+
+const getDynamicStyles = (props: DynamicStylesProps) => ({
+  foregroundLine: {
+    width: props.widthAnimated.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0%", "100%"],
+    }),
+  },
+});

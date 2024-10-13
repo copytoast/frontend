@@ -10,7 +10,7 @@ import {
 
 import Colors from "@/constants/Colors";
 
-interface ModalProps {
+interface ModalFrameProps {
   visible: boolean;
   children: React.ReactNode;
   buttons: React.ReactNode;
@@ -22,7 +22,7 @@ export default function ModalFrame({
   children,
   buttons,
   style,
-}: ModalProps) {
+}: ModalFrameProps) {
   const [enabled, setEnabled] = React.useState(visible);
 
   const bgAnimated = React.useRef(new Animated.Value(0)).current;
@@ -30,80 +30,44 @@ export default function ModalFrame({
   const contentAnimated = React.useRef(new Animated.Value(0)).current;
   const buttonAnimated = React.useRef(new Animated.Value(0)).current;
 
+  const dynamicStyles = getDynamicStyles({
+    bgAnimated,
+    modalAnimated,
+    contentAnimated,
+    buttonAnimated,
+  });
+
+  // visible 값이 변경될 때마다 애니메이션을 실행
   React.useEffect(() => {
-    const runAnimations = () => {
-      const animations = visible
-        ? [
-            animate(bgAnimated, 1),
-            animate(modalAnimated, 1),
-            animate(contentAnimated, 1),
-            animate(buttonAnimated, 1, 50),
-          ]
-        : [
-            animate(buttonAnimated, 0),
-            animate(bgAnimated, 0, 50),
-            animate(modalAnimated, 0, 50),
-            animate(contentAnimated, 0, 50),
-          ];
-
-      Animated.parallel(animations).start(({ finished }) => {
-        if (!visible && finished) setEnabled(false);
-      });
-    };
-
-    runAnimations();
     if (visible) setEnabled(true);
-  }, [visible]);
 
-  const dynamicStyles = {
-    background: {
-      backgroundColor: bgAnimated.interpolate({
-        inputRange: [0, 1],
-        outputRange: ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.5)"],
-      }),
-    },
-    modal: {
-      transform: [
-        {
-          translateY: modalAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [30, 0],
-          }),
-        },
-      ],
-    },
-    content: {
-      transform: [
-        {
-          translateY: contentAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [30, 0],
-          }),
-        },
-      ],
-      opacity: contentAnimated,
-    },
-    button: {
-      transform: [
-        {
-          translateY: buttonAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [30, 0],
-          }),
-        },
-      ],
-      opacity: buttonAnimated,
-    },
-  };
+    const animations = visible
+      ? [
+          animate(bgAnimated, 1),
+          animate(modalAnimated, 1),
+          animate(contentAnimated, 1),
+          animate(buttonAnimated, 1, 50),
+        ]
+      : [
+          animate(buttonAnimated, 0),
+          animate(bgAnimated, 0, 50),
+          animate(modalAnimated, 0, 50),
+          animate(contentAnimated, 0, 50),
+        ];
+
+    Animated.parallel(animations).start(({ finished }) => {
+      if (finished && !visible) setEnabled(false);
+    });
+  }, [visible]);
 
   return (
     <Modal visible={enabled} transparent>
-      <Animated.View style={[dynamicStyles.background, styles.background]}>
-        <Animated.View style={[dynamicStyles.modal, styles.modal, style]}>
-          <Animated.View style={[dynamicStyles.content, styles.content]}>
+      <Animated.View style={[dynamicStyles.background, staticStyles.background]}>
+        <Animated.View style={[dynamicStyles.modal, staticStyles.modal, style]}>
+          <Animated.View style={[dynamicStyles.content, staticStyles.content]}>
             {children}
           </Animated.View>
-          <Animated.View style={[dynamicStyles.button, styles.button]}>
+          <Animated.View style={[dynamicStyles.button, staticStyles.button]}>
             {buttons}
           </Animated.View>
         </Animated.View>
@@ -112,7 +76,7 @@ export default function ModalFrame({
   );
 }
 
-const styles = StyleSheet.create({
+const staticStyles = StyleSheet.create({
   background: {
     flex: 1,
   },
@@ -127,8 +91,14 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
   },
-  content: { paddingVertical: 10 },
-  button: { flexDirection: "row", justifyContent: "space-between", gap: 10 },
+  content: {
+    paddingVertical: 10,
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+  },
 });
 
 const animate = (
@@ -144,3 +114,51 @@ const animate = (
     delay,
   });
 };
+
+interface dynamicStylesProps {
+  bgAnimated: Animated.Value;
+  modalAnimated: Animated.Value;
+  contentAnimated: Animated.Value;
+  buttonAnimated: Animated.Value;
+}
+
+const getDynamicStyles = (props: dynamicStylesProps) => ({
+  background: {
+    backgroundColor: props.bgAnimated.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.5)"],
+    }),
+  },
+  modal: {
+    transform: [
+      {
+        translateY: props.modalAnimated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [30, 0],
+        }),
+      },
+    ],
+  },
+  content: {
+    transform: [
+      {
+        translateY: props.contentAnimated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [30, 0],
+        }),
+      },
+    ],
+    opacity: props.contentAnimated,
+  },
+  button: {
+    transform: [
+      {
+        translateY: props.buttonAnimated.interpolate({
+          inputRange: [0, 1],
+          outputRange: [30, 0],
+        }),
+      },
+    ],
+    opacity: props.buttonAnimated,
+  },
+});
