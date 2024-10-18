@@ -67,6 +67,11 @@ export default function MyToastSection({
               addCount={toast.addCount}
               added={toast.added}
               my={toast.creator === sessionContext.state.user?.username}
+              menuActions={{
+                onPlay: () => {},
+                onDetail: () => {},
+                onDelete: () => {},
+              }}
               detailButtonVisible
             />
           ))}

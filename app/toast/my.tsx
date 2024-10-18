@@ -17,13 +17,13 @@ import Colors from "@/constants/Colors";
 import CheckBox from "@/components/CheckBox";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
-import Menu from "@/components/Menu";
 
 import { SessionContext } from "@/contexts/Session";
 
 import getAddedToasts, {
   type GetAddedToastsResult,
 } from "@/api/getAddedToasts";
+import ToastDetailMenu from "@/components/toast/ToastDetailMenu";
 
 export default function My() {
   const sessionContext = React.useContext(SessionContext);
@@ -183,7 +183,11 @@ export default function My() {
                 my={toast.creator === sessionContext.state.user?.username}
                 checked={checkedToasts.includes(toast.id)}
                 onCheckChange={(checked) => handleToastCheck(toast.id, checked)}
-                onDetail={() => {}}
+                menuActions={{
+                  onPlay: () => {},
+                  onDetail: () => {},
+                  onDelete: () => {},
+                }}
                 checkBoxVisible
                 detailButtonVisible
               />
@@ -193,21 +197,16 @@ export default function My() {
       </View>
 
       {/* 더보기 메뉴 */}
-      <Menu
-        open={menuOpen}
-        onClose={handleMenuClose}
-        buttonLayout={moreButtonLayout}
-      >
-        <Button
-          icon={<MaterialIcons name={"delete"} size={20} color={Colors.grey} />}
-          label={"담기 취소"}
-          onPress={() => {
-            handleMenuClose();
+      {moreButtonLayout && (
+        <ToastDetailMenu
+          visible={menuOpen}
+          actions={{
+            onDelete: () => {},
           }}
-          backgroundColor={Colors.white}
-          contentStyle={staticStyles.menuItem}
+          onClose={handleMenuClose}
+          triggerLayout={moreButtonLayout}
         />
-      </Menu>
+      )}
     </ScrollView>
   );
 }
@@ -233,9 +232,5 @@ const staticStyles = StyleSheet.create({
   toast: {
     paddingVertical: 15,
     paddingHorizontal: 10,
-  },
-  menuItem: {
-    justifyContent: "flex-start",
-    width: "100%",
   },
 });
